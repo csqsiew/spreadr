@@ -1,0 +1,92 @@
+---
+title: 'spreadr: A R package to simulate spreading activation in a network'
+author: "Cynthia S. Q. Siew"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+## Introduction
+
+The notion of spreading activation is a prevalent metaphor in the cognitive sciences; however, the tools to implement spreading activation in a computational simulation are not as readily available. This paper introduces the `spreadr` R package (pronunced 'spread-er'), which can implement spreading activation within a specified network structure. The algorithmic method implemented in `spreadr` subroutines followed the approach described in Vitevitch, Ercal, and Adagarla (2011), who viewed activation as a fixed cognitive resource that could “spread” among connected nodes in a network. See Vitevitch et al. (2011) for more details on the implementation of the spreading activation process. 
+
+## 0: Set up
+
+```{r, eval=TRUE}
+options(stringsAsFactors = FALSE) # to prevent strings from being converted to a factor class
+extrafont::loadfonts(quiet=TRUE)
+
+# install.packages('devtools')
+# library(devtools)
+# install_github('csqsiew/spreadr') # download spreadr from my github page
+library(spreadr)
+```
+
+## 1: Generate a network object for spreading activation to occur in
+
+First, the network on which the spreading of activation occurs on must be specified. In this example, we use the `sample_gnp` function from the `igraph` R package to generate a network with 20 nodes and undirected links are randomly placed between the nodes with a probability of 0.2. In this step it is important that the `network` argument in the `spreadr` function (i) is recognized by `igraph` as a network object and has a `name` attribute (to specify meaningful node labels), or (ii) a symmetrical adjacency matrix (node names will simply be the column numbers).   
+
+Note that in this example `spreadr` implements spreading activation process in an unweighted, undirected network, but it is possible to implement the process in a weighted network as well whereby more activation is passed between nodes that have "stronger" edges, or in a directed (asymmetric) network where activation can pass from node i to node j but not necessarily from node j to node i.    
+
+```{r, warning=FALSE}
+library(igraph)
+set.seed(1)
+
+g <- sample_gnp(20, 0.2, directed = F, loops = F) # make a random network
+V(g)$name <- paste0('N', as.character(1:gorder(g))) # give some meaningful labels for the 'name' attribute
+
+V(g)$color <- c('blue', rep('white', 19))
+plot(g, l = layout_with_fr(g), vertex.size = 10, vertex.label.dist = 2, vertex.label.cex = 0.8)
+# the blue node will be assigned activation at t = 0
+```
+
+## 2: Create a dataframe with initial activation values 
+
+The user must then specify the initial activation level(s) of node(s) in the network in a dataframe object with two columns labeled node and activation. Below the node labeled “N1” was assigned 20 units of activation. The user can choose to provide different activation values, or initialize more nodes with various activation values.
+
+```{r}
+initial_df <- data.frame(node = 'N1', activation = 20, stringsAsFactors = F)
+initial_df
+```
+
+## 3: Run the simulation
+
+We are finally ready to run the simulation. In this step, the user must specify the following arguments and parameters in the `spreadr` function: 
+
+(i) *start_run*: the dataframe (`initial_df`) specified in the previous step that contains the activation values assigned to nodes at t = 0; 
+(ii) *decay*, d: the proportion of activation lost at each time step (range from 0 to 1); 
+(iii) *retention*, r: the proportion of activation retained in the originator node (range from 0 to 1); 
+(iv) *suppress*, d: nodes with activation values lower than this value will have their activations forced to 0. Typically this will be a very small value (e.g., < 0.001); 
+(v) *network*: the network (must be an igraph object or a non-zero matrix) on which the spreading of activation occurs on, and
+(vi) *time*, t: the number of times to run the spreading activation process for.  
+(vii) *create_name*: creates numbers/names for nodes, default is TRUE.    
+
+```{r}
+result <- spreadr::spreadr(start_run = initial_df, decay = 0,
+                              retention = 0.5, suppress = 0,
+                              network = g, time = 10) 
+```
+
+## 4: Results
+
+The output is a dataframe with 3 columns labeled *node*, *activation*, and *time*, and contains the activation value of each node at each time step. The output can be easily saved as a .csv file for further analysis later. A plot showing the activation levels of each node in the network at each time step is shown below.
+
+```{r}
+head(result, 10) # view the results
+# write.csv(result, file = 'result.csv') # save the results 
+
+library(ggplot2) 
+a1 <- data.frame(node = 'N1', activation = 20, time = 0) # add back initial activation at t = 0
+result_t0 <- rbind(result,a1)
+ggplot(data = result_t0, aes(x = time, y = activation, color = node, group = node)) +
+  geom_point() + geom_line() # visualize the results 
+```
+
+### References 
+
+Siew, C. S. Q. (in prep). spreadr: A R package to simulate spreading activation in a network.      
+Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011). Simulating retrieval from a highly clustered network: Implications for spoken word recognition. Frontiers in psychology, 2, 369.
+

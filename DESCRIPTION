@@ -1,0 +1,25 @@
+Package: spreadr
+Type: Package
+Title: Spreading Activation in a Network in R
+Version: 0.1.0
+Authors@R: c(
+	person("Cynthia","Siew", email = "cynsiewsq@gmail.com",
+               role = c("aut", "cre")),
+	person(c("Dirk","U."), "Wulff", role = "ctb",
+    	       email = "dirk.wulff@gmail.com")
+	)
+Description: A set of functions to simulate the spreading of activation among nodes in a network.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: Rcpp (>= 0.12.5)
+RoxygenNote: 6.1.0
+Imports: igraph, extrafont, ggplot2
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+LinkingTo: Rcpp
+NeedsCompilation: yes
+Packaged: 2018-10-17 11:19:44 UTC; dwulff
+Author: Cynthia Siew [aut, cre],
+  Dirk U. Wulff [ctb]
+Maintainer: Cynthia Siew <cynsiewsq@gmail.com>
