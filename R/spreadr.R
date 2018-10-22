@@ -119,7 +119,7 @@ spreadr <- function(
   }
 
   # OTHER OUT STUFF
-  nodes = rep(1:n_nodes, time)
+  nodes = rep(names(d), time) # keep original names of graph
   is = rep(1:time, rep(n_nodes, time))
 
   return(data.frame('node' = nodes, # spread_fast does not include t=0
