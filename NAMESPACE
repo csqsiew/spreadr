@@ -3,5 +3,6 @@
 export(spread)
 export(spread_fast)
 export(spreadr)
+export(spreadr_2)
 importFrom(Rcpp,sourceCpp)
 useDynLib(spreadr)
