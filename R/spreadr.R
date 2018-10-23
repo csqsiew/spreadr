@@ -22,7 +22,9 @@ spreadr <- function(
   retention = 0.5, # retention parameter
   time = 10, # number of time steps
   decay = 0, # decay paramater
-  suppress = 0, # suppress parameter
+  suppress = 0, # suppress parameter,
+  # ignore_time = F, # threshold of difference to stop simulation 
+  # threshold_to_stop = 0.01, # % of total activation in start_run as the threshold 
   create_names = TRUE # name nodes 1:size if needed
 ){
   ### ERROR MESSAGES ###
