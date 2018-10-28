@@ -11,7 +11,7 @@ vignette: >
 
 ## Introduction
 
-The notion of spreading activation is a prevalent metaphor in the cognitive sciences; however, the tools to implement spreading activation in a computational simulation are not as readily available. This paper introduces the `spreadr` R package (pronunced 'spread-er'), which can implement spreading activation within a specified network structure. The algorithmic method implemented in `spreadr` subroutines followed the approach described in Vitevitch, Ercal, and Adagarla (2011), who viewed activation as a fixed cognitive resource that could “spread” among connected nodes in a network. See Vitevitch et al. (2011) for more details on the implementation of the spreading activation process. 
+The notion of spreading activation is a prevalent metaphor in the cognitive sciences; however, the tools to implement spreading activation in a computational simulation are not as readily available. This paper introduces the `spreadr` R package (pronunced 'SPREAD-er'), which can implement spreading activation within a specified network structure. The algorithmic method implemented in `spreadr` subroutines followed the approach described in Vitevitch, Ercal, and Adagarla (2011), who viewed activation as a fixed cognitive resource that could “spread” among connected nodes in a network. See Vitevitch et al. (2011) for more details on the implementation of the spreading activation process. 
 
 ## 0: Set up
 
@@ -27,9 +27,9 @@ library(spreadr)
 
 ## 1: Generate a network object for spreading activation to occur in
 
-First, the network on which the spreading of activation occurs on must be specified. In this example, we use the `sample_gnp` function from the `igraph` R package to generate a network with 20 nodes and undirected links are randomly placed between the nodes with a probability of 0.2. In this step it is important that the `network` argument in the `spreadr` function (i) is recognized by `igraph` as a network object and has a `name` attribute (to specify meaningful node labels), or (ii) a symmetrical adjacency matrix (node names will simply be the column numbers).   
+First, the network on which the spreading of activation occurs on must be specified. In this example, we use the `sample_gnp` function from the `igraph` R package to generate a network with 20 nodes and undirected links are randomly placed between the nodes with a probability of 0.2. In this step it is important that the `network` argument in the `spreadr` function is either (i) recognized by `igraph` as a network object and has a `name` attribute (to specify meaningful node labels), or (ii) an adjacency matrix (node names will simply be the column numbers).   
 
-Note that in this example `spreadr` implements spreading activation process in an unweighted, undirected network, but it is possible to implement the process in a weighted network as well whereby more activation is passed between nodes that have "stronger" edges, or in a directed (asymmetric) network where activation can pass from node i to node j but not necessarily from node j to node i.    
+Note that in this example `spreadr` implements spreading activation process in an unweighted, undirected network, but it is possible to implement the process in a weighted network as well whereby more activation is passed between nodes that have "stronger" edges, or in a directed (asymmetric) network where activation can pass from node i to node j but not necessarily from node j to node i (additional examples below).    
 
 ```{r, warning=FALSE}
 library(igraph)
@@ -39,7 +39,8 @@ g <- sample_gnp(20, 0.2, directed = F, loops = F) # make a random network
 V(g)$name <- paste0('N', as.character(1:gorder(g))) # give some meaningful labels for the 'name' attribute
 
 V(g)$color <- c('blue', rep('white', 19))
-plot(g, l = layout_with_fr(g), vertex.size = 10, vertex.label.dist = 2, vertex.label.cex = 0.8)
+l <- layout_with_fr(g) # to save the layout 
+plot(g, l = l, vertex.size = 10, vertex.label.dist = 2, vertex.label.cex = 0.8)
 # the blue node will be assigned activation at t = 0
 ```
 
@@ -62,7 +63,7 @@ We are finally ready to run the simulation. In this step, the user must specify 
 (iv) *suppress*, d: nodes with activation values lower than this value will have their activations forced to 0. Typically this will be a very small value (e.g., < 0.001); 
 (v) *network*: the network (must be an igraph object or a non-zero matrix) on which the spreading of activation occurs on, and
 (vi) *time*, t: the number of times to run the spreading activation process for.  
-(vii) *create_name*: creates numbers/names for nodes, default is TRUE.    
+(vii) *create_name*: creates numbers/names for nodes if needed, default is TRUE.    
 
 ```{r}
 result <- spreadr::spreadr(start_run = initial_df, decay = 0,
@@ -76,17 +77,75 @@ The output is a dataframe with 3 columns labeled *node*, *activation*, and *time
 
 ```{r}
 head(result, 10) # view the results
+tail(result, 10)
 # write.csv(result, file = 'result.csv') # save the results 
 
 library(ggplot2) 
 a1 <- data.frame(node = 'N1', activation = 20, time = 0) # add back initial activation at t = 0
 result_t0 <- rbind(result,a1)
 ggplot(data = result_t0, aes(x = time, y = activation, color = node, group = node)) +
-  geom_point() + geom_line() # visualize the results 
+  geom_point() + geom_line() + ggtitle('unweighted, undirected network') # visualize the results 
+```
+
+## 5: Additional examples
+
+This section shows how spreadr can be implemented in a weighted network (i.e., the edges in the network can have different weights) and a directed network (i.e., the edges in the network are not symmetric).     
+
+(i) Weighted, undirected network      
+
+```{r}
+# weighted, undirected network example 
+g_w <- g
+set.seed(2)
+E(g_w)$weight <- runif(gsize(g_w)) # make the edges in the network have different weights ranging from 0 to 1 (excluding extreme values)
+
+result_w <- spreadr::spreadr(start_run = initial_df, decay = 0,
+                              retention = 0.5, suppress = 0,
+                              network = g_w, time = 10) 
+
+result_w_t0 <- rbind(result_w, a1) # add back initial activation at t = 0
+ggplot(data = result_w_t0, aes(x = time, y = activation, color = node, group = node)) +
+  geom_point() + geom_line() + ggtitle('weighted, undirected network') # visualize the results 
+```
+
+As you can see from the plot, the result is slightly different from the original example with unweighted edges. More activation is passed to the node that is more "strongly" connected to the originator node.      
+
+(ii) Unweighted, directed network
+
+For this example, we will create the network via an adjacency matrix.   
+
+```{r}
+# unweighted, directed network example
+set.seed(3)
+g_d_mat <- matrix(sample(c(0,1), 100, replace = T), 10, 10) # make a matrix and randomly fill some cells with 1s 
+diag(g_d_mat) <- 0 # remove self-loops 
+g_d_mat
+
+# spreadr will work on an adjacency matrix too 
+result_d <- spreadr::spreadr(start_run = data.frame(node = 1, activation = 20, stringsAsFactors = F), 
+                             decay = 0,
+                              retention = 0.5, suppress = 0,
+                              network = g_d_mat, time = 10) 
+
+result_d_t0 <- rbind(result_d, data.frame(node = 1, activation = 20, time = 0)) # add back initial activation at t = 0
+ggplot(data = result_d_t0, aes(x = time, y = activation, color = node, group = node)) +
+  geom_point() + geom_line() + ggtitle('unweighted, directed network') 
+```
+
+It is important to keep in mind that the directionality of the edges goes column-wise and not row-wise. In other words, node 1 --> node 2 is represented by filling in the cell in COLUMN 1, ROW 2 of the adjacency matrix. See below and compare it to the plot above.      
+
+```{r}
+# first column 
+data.frame(node = 1:10, edge = g_d_mat[,1])
+# hence activation is going from node 1 to nodes 3,4,10 - as in the plot 
+
+# first row - wrong direction!
+data.frame(node = 1:10, edge = g_d_mat[1,])
+# activation does NOT go from node 1 to nodes 3,4,5,7,8,10
 ```
 
 ### References 
 
-Siew, C. S. Q. (in prep). spreadr: A R package to simulate spreading activation in a network.      
-Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011). Simulating retrieval from a highly clustered network: Implications for spoken word recognition. Frontiers in psychology, 2, 369.
+Siew, C. S. Q. (under review). spreadr: A R package to simulate spreading activation in a network.      
+Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011). Simulating retrieval from a highly clustered network: Implications for spoken word recognition. *Frontiers in Psychology, 2*, 369.
 
