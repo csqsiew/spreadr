@@ -2,6 +2,7 @@
 #'
 #' This function takes in a dataframe with 'node' and 'activation' columns, and
 #' simulates the spread of activation among nodes in a specified network structure.
+#' Note that spreadr_2 is identical to spreadr, except that there is an additonal option for the user to 
 #'
 #' @param start_run A non-empty dataframe with 'node' and 'activation' columns. Must be specified.
 #' @param decay Proportion of activation that is lost at each time step. Ranges from 0 to 1. Default is 0.
@@ -9,10 +10,16 @@
 #' @param suppress Suppress nodes with a final activation of < x units at each time step to an activation value of 0. Default is 0.
 #' @param network Network where the spreading occurs. Must be specified. Must be an igraph object with a "name" property or an adjacency matrix.
 #' @param time Number of time steps to run the spreadr() function for. Default is 10.
-#' @param create_names Name nodes 1:numeber_of_nodes in case network is missing node names.
+#' @param ignore_time Indicate whether to ignore the number of time steps listed and allow for the spreading activation process to continue until the value listed in threshold_to_stop is achieved. Default = F
+#' @param threshold_to_stop Stop spreading activation when the proportion of total activation in start_run is below the threshold. Default = 0.01
+#' @param create_names Name nodes 1:number_of_nodes in case network is missing node names.
 #' @return A compiled dataframe with 'node', 'activation' and 'time' columns showing the spread of activation in the network over time.
 #' @examples
-#' #See Vignette for examples.
+#' g_d_mat <- matrix(sample(c(0,1), 100, replace = T), 10, 10) # make an adjacency matrix and randomly fill some cells with 1s 
+#' diag(g_d_mat) <- 0 # remove self-loops 
+#' result_d <- spreadr::spreadr_2(start_run = data.frame(node = 1, activation = 20, stringsAsFactors = F), decay = 0, retention = 0.5, suppress = 0, network = g_d_mat, ignore_time = T, threshold_to_stop = 0.01) 
+#' head(result, 10)
+#' tail(result, 10)
 #' @export
 
 
@@ -23,7 +30,7 @@ spreadr_2 <- function(
     time = 10, # number of time steps
     decay = 0, # decay paramater
     suppress = 0, # suppress parameter,
-    ignore_time = F, # threshold of difference to stop simulation 
+    ignore_time = F, 
     threshold_to_stop = 0.01, # % of total activation in start_run as the threshold 
     create_names = TRUE # name nodes 1:size if needed
 ){

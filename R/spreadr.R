@@ -9,10 +9,14 @@
 #' @param suppress Suppress nodes with a final activation of < x units at each time step to an activation value of 0. Default is 0.
 #' @param network Network where the spreading occurs. Must be specified. Must be an igraph object with a "name" property or an adjacency matrix.
 #' @param time Number of time steps to run the spreadr() function for. Default is 10.
-#' @param create_names Name nodes 1:numeber_of_nodes in case network is missing node names.
+#' @param create_names Name nodes 1:number_of_nodes in case network is missing node names.
 #' @return A compiled dataframe with 'node', 'activation' and 'time' columns showing the spread of activation in the network over time.
 #' @examples
-#' #See Vignette for examples.
+#' g_d_mat <- matrix(sample(c(0,1), 100, replace = T), 10, 10) # make an adjacency matrix and randomly fill some cells with 1s 
+#' diag(g_d_mat) <- 0 # remove self-loops 
+#' result_d <- spreadr::spreadr(start_run = data.frame(node = 1, activation = 20, stringsAsFactors = F), decay = 0, retention = 0.5, suppress = 0, network = g_d_mat, time = 10) 
+#' head(result, 10)
+#' tail(result, 10)
 #' @export
 
 
@@ -23,8 +27,6 @@ spreadr <- function(
   time = 10, # number of time steps
   decay = 0, # decay paramater
   suppress = 0, # suppress parameter,
-  # ignore_time = F, # threshold of difference to stop simulation 
-  # threshold_to_stop = 0.01, # % of total activation in start_run as the threshold 
   create_names = TRUE # name nodes 1:size if needed
 ){
   ### ERROR MESSAGES ###

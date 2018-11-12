@@ -1,6 +1,6 @@
 Package: spreadr
 Type: Package
-Title: Spreading Activation in a Network in R
+Title: Simulating Spreading Activation in a Network
 Version: 0.1.0
 Authors@R: c(
 	person("Cynthia","Siew", email = "cynsiewsq@gmail.com",
@@ -8,7 +8,7 @@ Authors@R: c(
 	person(c("Dirk","U."), "Wulff", role = "ctb",
     	       email = "dirk.wulff@gmail.com")
 	)
-Description: A set of functions to simulate the spreading of activation among nodes in a network.
+Description: The notion of spreading activation is a prevalent metaphor in the cognitive sciences; this package provides the tools for cognitive scientists and psychologists to conduct computer simulations that implement spreading activation in a network representation. The algorithmic method implemented in `spreadr` subroutines followed the approach described in Vitevitch, Ercal, and Adagarla (2011, Frontiers), who viewed activation as a fixed cognitive resource that could spread among nodes that were connected to each other via edges or connections (i.e., a network). See Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011). Simulating retrieval from a highly clustered network: Implications for spoken word recognition. Frontiers in psychology, 2, 369. https://doi.org/10.3389/fpsyg.2011.00369 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

@@ -30,5 +30,9 @@ This function takes in a dataframe with 'node' and 'activation' columns, and
 simulates the spread of activation among nodes in a specified network structure.
 }
 \examples{
-#See Vignette for examples.
+g_d_mat <- matrix(sample(c(0,1), 100, replace = T), 10, 10) # make an adjacency matrix and randomly fill some cells with 1s 
+diag(g_d_mat) <- 0 # remove self-loops 
+result_d <- spreadr::spreadr(start_run = data.frame(node = 1, activation = 20, stringsAsFactors = F), decay = 0, retention = 0.5, suppress = 0, network = g_d_mat, time = 10) 
+head(result, 10)
+tail(result, 10)
 }
