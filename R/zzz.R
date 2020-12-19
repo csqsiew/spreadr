@@ -1,3 +1,3 @@
-#' @useDynLib SpANR
 #' @importFrom Rcpp sourceCpp
+#' @useDynLib spreadr
 NULL
