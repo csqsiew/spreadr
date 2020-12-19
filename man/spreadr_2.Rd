@@ -42,15 +42,17 @@ A compiled dataframe with 'node', 'activation' and 'time' columns showing the sp
 This function takes in a dataframe with 'node' and 'activation' columns, and
 simulates the spread of activation among nodes in a specified network structure.
 Note that spreadr_2 is identical to spreadr, except that there is an additonal option for the user to
+stop the simulation when the total activation is below a certain threshold.
 }
 \examples{
-g_d_mat <- matrix(sample(c(0,1), 100, replace = TRUE), 10, 10) 
-# make an adjacency matrix and randomly fill some cells with 1s 
-diag(g_d_mat) <- 0 # remove self-loops 
+g_d_mat <- matrix(sample(c(0,1), 100, replace = TRUE), 10, 10)
+# make an adjacency matrix and randomly fill some cells with 1s
+diag(g_d_mat) <- 0 # remove self-loops
 library(spreadr)
 initial_df <- data.frame(node = 1, activation = 20, stringsAsFactors = FALSE)
-result_d <- spreadr_2(start_run = initial_df, decay = 0, retention = 0.5, 
-suppress = 0, network = g_d_mat, ignore_time = TRUE, threshold_to_stop = 0.01) 
+result_d <- spreadr_2(start_run = initial_df, decay = 0, retention = 0.5,
+suppress = 0, network = g_d_mat, ignore_time = TRUE, threshold_to_stop = 0.01)
 head(result_d, 10)
 tail(result_d, 10)
+
 }

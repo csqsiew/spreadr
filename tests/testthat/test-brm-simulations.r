@@ -11,12 +11,27 @@ library(fs)
 setup({
   # Download files
   download_urls <- list(
-    "ego2hopnets_24.RData" = "https://osf.io/download/vucnf/",
-    "study1_rawoutput.zip" = "https://osf.io/download/vy42b/",
-    "study2_rawoutput.zip" = "https://osf.io/download/6xzgq/",
-    "24toynets.csv"        = "https://osf.io/download/9wz6s/")
+    # Lexical retrieval simulation
+    "ego2hopnets_24.RData"    = "https://osf.io/download/vucnf/",
+    "study1_rawoutput.zip"    = "https://osf.io/download/vy42b/",
+    "24toynets.csv"           = "https://osf.io/download/9wz6s/",
+    # False memory simulation
+    "study2_rawoutput.zip"    = "https://osf.io/download/6xzgq/",
+    # Semantic priming simulation
+    "usf.RData"               = "https://osf.io/download/gwyc8/",
+    "spp_200_pairs.RData"     = "https://osf.io/download/h42ay/",
+    # Because these simulations run for many iterations (800), each on a rather
+    # large network (10k nodes, 63k edges), they will take a /very/ long time to
+    # test. Instead, we prepare to test only the first pair of words, for one
+    # retention value of 0.8, and we really run that test only if the user says
+    # to do so, by specifying an environment variable TEST_SEMANTIC_PRIMING to
+    # any non-empty string.
+    # "spp_retention_0.2.RData" = "https://osf.io/download/yjt4g/",
+    # "spp_retention_0.4.RData" = "https://osf.io/download/f48th/",
+    # "spp_retention_0.6.RData" = "https://osf.io/download/uk6rz/",
+    "spp_retention_0.8.RData" = "https://osf.io/download/ybq6u/")
   sapply(names(download_urls), function(fn) {
-    if (!file_exists(fn)) download.file(download_urls[[fn]], fn)
+    if (!file_exists(fn)) download.file(download_urls[[fn]], fn, quiet=TRUE)
   })
   # Extract zipped files
   zip_files <- Filter(function(fn) grepl("\\.zip$", fn), names(download_urls))
@@ -66,3 +81,32 @@ for (retention in retentions) {
     )
   }
 }
+
+load("usf.RData")
+usf <- igraph::simplify(usf)
+igraph::E(usf)$weight <- 1
+load("spp_200_pairs.RData")
+load("spp_retention_0.8.RData")  # loaded into name x
+spp_retention_0.8 <- x
+
+test_that("Semantic priming simulation: pair 1, retention 0.8", {
+  skip_if(
+    Sys.getenv("TEST_SEMANTIC_PRIMING") == "",
+    paste0(c(
+      "This test takes a few minutes, during which it will use up all",
+      "system memory on most personal computers and laptops. If you are sure",
+      "you would like to run this test, set the environment variable",
+      "TEST_SEMANTIC_PRIMING to any non-empty string."),
+      collapse="\n"))
+  start_run <- data.frame(
+    node=spp_200_pairs$Prime[1], activation=100, stringsAsFactors=FALSE)
+  result <- spreadr(
+    start_run=start_run, network=usf,
+    retention=0.8, time=10, suppress=0, decay=0)
+  targets <- subset(result, node == spp_200_pairs$TargetWord[1])
+  result_vector <- c(
+    spp_200_pairs$Prime[1], spp_200_pairs$TargetWord[1], targets$activation)
+  expected_vector <- spp_retention_0.8[1, ]
+  expect_equal(result_vector, expected_vector)
+  gc()
+})
