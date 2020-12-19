@@ -35,7 +35,7 @@ spreadr <- function(
 ){
   ### ERROR MESSAGES ###
   # check if start_run is in the correct format
-  if (is.data.frame(start_run) == F || colnames(start_run) != c('node', 'activation')) {
+  if (!is.data.frame(start_run) || !all(colnames(start_run) == c('node', 'activation'))) {
     stop('Initial activation dataframe is not in the correct format. Must be a dataframe with -node-
          and -activation- columns.')
   }
