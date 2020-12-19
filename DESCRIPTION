@@ -8,21 +8,24 @@ Authors@R: c(
 	person(c("Dirk","U."), "Wulff", role = "ctb",
     	       email = "dirk.wulff@gmail.com")
 	)
-Description: The notion of spreading activation is a prevalent metaphor in the cognitive sciences. 
-    This package provides the tools for cognitive scientists and psychologists to conduct computer simulations 
-    that implement spreading activation in a network representation. The algorithmic method implemented in 'spreadr' 
-    subroutines follows the approach described in Vitevitch, Ercal, and Adagarla (2011, Frontiers), 
-    who viewed activation as a fixed cognitive resource that could spread among nodes that were connected to 
-    each other via edges or connections (i.e., a network). See Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011). 
-    Simulating retrieval from a highly clustered network: Implications for spoken word recognition. 
-    Frontiers in Psychology, 2, 369. <doi:10.3389/fpsyg.2011.00369>. 
+Description: The notion of spreading activation is a prevalent metaphor in the cognitive sciences.
+    This package provides the tools for cognitive scientists and psychologists to conduct computer simulations
+    that implement spreading activation in a network representation. The algorithmic method implemented in 'spreadr'
+    subroutines follows the approach described in Vitevitch, Ercal, and Adagarla (2011, Frontiers),
+    who viewed activation as a fixed cognitive resource that could spread among nodes that were connected to
+    each other via edges or connections (i.e., a network). See Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011).
+    Simulating retrieval from a highly clustered network: Implications for spoken word recognition.
+    Frontiers in Psychology, 2, 369. <doi:10.3389/fpsyg.2011.00369>.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends: Rcpp (>= 0.12.5)
-RoxygenNote: 6.1.0
-Imports: igraph, extrafont, ggplot2
-Suggests: knitr, rmarkdown
+RoxygenNote: 7.1.0
+Imports: igraph, extrafont, ggplot2, fs
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 NeedsCompilation: yes

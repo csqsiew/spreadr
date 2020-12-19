@@ -4,9 +4,17 @@
 \alias{spreadr_2}
 \title{Spread of activation process to determine activation of network nodes.}
 \usage{
-spreadr_2(network, start_run, retention = 0.5, time = 10, decay = 0,
-  suppress = 0, ignore_time = F, threshold_to_stop = 0.01,
-  create_names = TRUE)
+spreadr_2(
+  network,
+  start_run,
+  retention = 0.5,
+  time = 10,
+  decay = 0,
+  suppress = 0,
+  ignore_time = F,
+  threshold_to_stop = 0.01,
+  create_names = TRUE
+)
 }
 \arguments{
 \item{network}{Network where the spreading occurs. Must be specified. Must be an igraph object with a "name" property or an adjacency matrix.}
