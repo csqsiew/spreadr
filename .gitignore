@@ -1,0 +1,6 @@
+tests/testthat/24toynets.csv
+tests/testthat/*.RData
+tests/testthat/study*_rawoutput*
+.*~$
+doc
+Meta

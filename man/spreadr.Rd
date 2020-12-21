@@ -4,8 +4,15 @@
 \alias{spreadr}
 \title{Spread of activation process to determine activation of network nodes.}
 \usage{
-spreadr(network, start_run, retention = 0.5, time = 10, decay = 0,
-  suppress = 0, create_names = TRUE)
+spreadr(
+  network,
+  start_run,
+  retention = 0.5,
+  time = 10,
+  decay = 0,
+  suppress = 0,
+  create_names = TRUE
+)
 }
 \arguments{
 \item{network}{Network where the spreading occurs. Must be specified. Must be an igraph object with a "name" property or an adjacency matrix.}
@@ -30,13 +37,14 @@ This function takes in a dataframe with 'node' and 'activation' columns, and
 simulates the spread of activation among nodes in a specified network structure.
 }
 \examples{
-g_d_mat <- matrix(sample(c(0,1), 100, replace = TRUE), 10, 10) 
-# make an adjacency matrix and randomly fill some cells with 1s 
-diag(g_d_mat) <- 0 # remove self-loops 
+g_d_mat <- matrix(sample(c(0,1), 100, replace = TRUE), 10, 10)
+# make an adjacency matrix and randomly fill some cells with 1s
+diag(g_d_mat) <- 0 # remove self-loops
 library(spreadr)
 initial_df <- data.frame(node = 1, activation = 20, stringsAsFactors = FALSE)
-result_d <- spreadr(start_run = initial_df, decay = 0, retention = 0.5, 
-suppress = 0, network = g_d_mat, time = 10) 
+result_d <- spreadr(start_run = initial_df, decay = 0, retention = 0.5,
+suppress = 0, network = g_d_mat, time = 10)
 head(result_d, 10)
 tail(result_d, 10)
+
 }

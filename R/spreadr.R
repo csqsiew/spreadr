@@ -11,18 +11,22 @@
 #' @param time Number of time steps to run the spreadr() function for. Default is 10.
 #' @param create_names Name nodes 1:number_of_nodes in case network is missing node names.
 #' @return A compiled dataframe with 'node', 'activation' and 'time' columns showing the spread of activation in the network over time.
+#'
 #' @examples
-#' g_d_mat <- matrix(sample(c(0,1), 100, replace = TRUE), 10, 10) 
-#' # make an adjacency matrix and randomly fill some cells with 1s 
-#' diag(g_d_mat) <- 0 # remove self-loops 
+#' g_d_mat <- matrix(sample(c(0,1), 100, replace = TRUE), 10, 10)
+#' # make an adjacency matrix and randomly fill some cells with 1s
+#' diag(g_d_mat) <- 0 # remove self-loops
 #' library(spreadr)
 #' initial_df <- data.frame(node = 1, activation = 20, stringsAsFactors = FALSE)
-#' result_d <- spreadr(start_run = initial_df, decay = 0, retention = 0.5, 
-#' suppress = 0, network = g_d_mat, time = 10) 
+#' result_d <- spreadr(start_run = initial_df, decay = 0, retention = 0.5,
+#' suppress = 0, network = g_d_mat, time = 10)
 #' head(result_d, 10)
 #' tail(result_d, 10)
+#'
+#' @importFrom Rcpp sourceCpp
+#' @useDynLib spreadr
+#'
 #' @export
-
 
 spreadr <- function(
   network, # an `igraph` network object or an adjacency matrix
@@ -35,7 +39,7 @@ spreadr <- function(
 ){
   ### ERROR MESSAGES ###
   # check if start_run is in the correct format
-  if (is.data.frame(start_run) == F || colnames(start_run) != c('node', 'activation')) {
+  if (!is.data.frame(start_run) || !all(colnames(start_run) == c('node', 'activation'))) {
     stop('Initial activation dataframe is not in the correct format. Must be a dataframe with -node-
          and -activation- columns.')
   }
