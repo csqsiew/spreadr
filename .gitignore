@@ -4,3 +4,5 @@ tests/testthat/study*_rawoutput*
 .*~$
 doc
 Meta
+*.o
+*.so

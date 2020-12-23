@@ -27,7 +27,6 @@
 #' @useDynLib spreadr
 #'
 #' @export
-
 spreadr <- function(
   network, # an `igraph` network object or an adjacency matrix
   start_run, # data.frame 'initial_df' with node and activation columns to specify activation at t = 0
@@ -66,7 +65,7 @@ spreadr <- function(
 
   ### SET UP ###
   ## CONVERT IGRAPH TO ADJMAT IF NEEDED, GET DEGREE ##
-  if(igraph::is.igraph(network) == T) { # if an igraph object
+  if(igraph::is.igraph(network)) {
 
     # check if the igraph object has a name attribute
     if (is.null(igraph::V(network)$name) == T) {
@@ -81,18 +80,18 @@ spreadr <- function(
     if (length(unique(igraph::V(network)$name)) != igraph::gorder(network)) {
       stop('Nodes need to have unique labels.')
     }
-    if(igraph::is.weighted(network) == T) { # if graph is weighted
-      mat<-igraph::as_adj(network, sparse = F, attr="weight") # to keep the weights in a weighted graph
-      d <- colSums(mat) # GET THE DEGREE OF EACH NODE
+    if(igraph::is.weighted(network)) { # if graph is weighted
+      mat <- igraph::as_adj(network, sparse = F, attr="weight") # to keep the weights in a weighted graph
+      d <- rowSums(mat) # GET THE DEGREE OF EACH NODE
       if(is.null(names(d))) names(d) <- 1:length(d) # names are simply column numbers
     } else {
-      mat<-igraph::as_adj(network, sparse = F) # unweighted graph
-      d <- colSums(mat) # GET THE DEGREE OF EACH NODE
+      mat <- igraph::as_adj(network, sparse = F) # unweighted graph
+      d <- rowSums(mat) # GET THE DEGREE OF EACH NODE
       if(is.null(names(d))) names(d) <- 1:length(d) # names are simply column numbers
     }
   } else {
     mat <- network # input is already an adj matrix
-    d <- colSums(mat) # GET THE DEGREE OF EACH NODE
+    d <- rowSums(mat) # GET THE DEGREE OF EACH NODE
     names(d) <- 1:length(d) # names are simply column numbers
   }
 
@@ -110,16 +109,13 @@ spreadr <- function(
   a_t <- a
 
   ## REPEAT PROCESS FOR EACH TIME STEP
-  activations = numeric(time * n_nodes)
+  activations <- numeric(time * n_nodes)
   for (i in seq_len(time)){
     # ACTIVATION AT TIME T - 1
     a_tm1 <- a_t
 
     # # ACTIVATION MATRIX AT TIME T
-    # mat_t <- apply(mat, 1, function(x) (1 - retention) * x * a_tm1/d) # this generalizes to weighted networks
-    # mat_t[is.nan(mat_t)] <- 0 # in case there are hermits in the network, convert NaNs to 0
-    # diag(mat_t) <- retention * a_tm1
-    mat_t = create_mat_t(mat, a_tm1, d, retention)
+    mat_t <- create_mat_t(mat, a_tm1, d, retention)
 
     # UPDATED ACTIVATION VECTOR
     a_t <- colSums(mat_t)
@@ -127,15 +123,14 @@ spreadr <- function(
     a_t[a_t < suppress] <- 0 # reduce activation to 0 cells less than suppress parameter
 
     # STORE RESULTS
-    activations[((i-1) * n_nodes + 1) : (i * n_nodes)] = a_t
+    activations[((i-1) * n_nodes + 1) : (i * n_nodes)] <- a_t
   }
 
   # OTHER OUT STUFF
-  nodes = rep(names(d), time) # keep original names of graph
-  is = rep(1:time, rep(n_nodes, time))
+  nodes <- rep(names(d), time) # keep original names of graph
+  is <- rep(1:time, rep(n_nodes, time))
 
-  return(data.frame('node' = nodes, # spread_fast does not include t=0
-                    'activation' = activations,
-                    'time' = is))
-  }
-
+  data.frame('node' = nodes, # spread_fast does not include t=0
+             'activation' = activations,
+             'time' = is)
+}
