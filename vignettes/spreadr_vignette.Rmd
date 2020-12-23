@@ -132,16 +132,12 @@ ggplot(data = result_d_t0, aes(x = time, y = activation, color = node, group = n
   geom_point() + geom_line() + ggtitle('unweighted, directed network') 
 ```
 
-It is important to keep in mind that the directionality of the edges goes column-wise and not row-wise. In other words, node 1 --> node 2 is represented by filling in the cell in COLUMN 1, ROW 2 of the adjacency matrix. See below and compare it to the plot above.      
+The (_i_, _j_) entry of the adjacency matrix should represent the edge going from source node _i_ to target node _j_.
+See below and compare it to the plot above.
 
 ```{r}
-# first column 
 data.frame(node = 1:10, edge = g_d_mat[,1])
-# hence activation is going from node 1 to nodes 3,4,10 - as in the plot 
-
-# first row - wrong direction!
 data.frame(node = 1:10, edge = g_d_mat[1,])
-# activation does NOT go from node 1 to nodes 3,4,5,7,8,10
 ```
 
 ### References 
