@@ -109,40 +109,28 @@ spreadr <- function(
   a_t <- a
 
   ## REPEAT PROCESS FOR EACH TIME STEP
-  activations = numeric(time * n_nodes)
-  message("Initial activations")
-  print(activations)
-  message("degree, d")
-  print(d)
+  activations <- numeric(time * n_nodes)
   for (i in seq_len(time)){
-    message("time ", i)
     # ACTIVATION AT TIME T - 1
     a_tm1 <- a_t
 
     # # ACTIVATION MATRIX AT TIME T
-    # mat_t <- apply(mat, 1, function(x) (1 - retention) * x * a_tm1/d) # this generalizes to weighted networks
-    # mat_t[is.nan(mat_t)] <- 0 # in case there are hermits in the network, convert NaNs to 0
-    # diag(mat_t) <- retention * a_tm1
-    mat_t = create_mat_t(mat, a_tm1, d, retention)
-    message("mat_t")
-    print(mat_t)
+    mat_t <- create_mat_t(mat, a_tm1, d, retention)
 
     # UPDATED ACTIVATION VECTOR
     a_t <- colSums(mat_t)
     a_t <- a_t * (1 - decay)  # decay proportion of activation at the end of each time step
     a_t[a_t < suppress] <- 0 # reduce activation to 0 cells less than suppress parameter
-    message("a_t")
-    print(a_t)
 
     # STORE RESULTS
-    activations[((i-1) * n_nodes + 1) : (i * n_nodes)] = a_t
+    activations[((i-1) * n_nodes + 1) : (i * n_nodes)] <- a_t
   }
 
   # OTHER OUT STUFF
-  nodes = rep(names(d), time) # keep original names of graph
-  is = rep(1:time, rep(n_nodes, time))
+  nodes <- rep(names(d), time) # keep original names of graph
+  is <- rep(1:time, rep(n_nodes, time))
 
-  return(data.frame('node' = nodes, # spread_fast does not include t=0
-                    'activation' = activations,
-                    'time' = is))
-  }
+  data.frame('node' = nodes, # spread_fast does not include t=0
+             'activation' = activations,
+             'time' = is)
+}
