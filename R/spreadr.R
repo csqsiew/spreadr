@@ -82,16 +82,16 @@ spreadr <- function(
     }
     if(igraph::is.weighted(network)) { # if graph is weighted
       mat <- igraph::as_adj(network, sparse = F, attr="weight") # to keep the weights in a weighted graph
-      d <- colSums(mat) # GET THE DEGREE OF EACH NODE
+      d <- rowSums(mat) # GET THE DEGREE OF EACH NODE
       if(is.null(names(d))) names(d) <- 1:length(d) # names are simply column numbers
     } else {
       mat <- igraph::as_adj(network, sparse = F) # unweighted graph
-      d <- colSums(mat) # GET THE DEGREE OF EACH NODE
+      d <- rowSums(mat) # GET THE DEGREE OF EACH NODE
       if(is.null(names(d))) names(d) <- 1:length(d) # names are simply column numbers
     }
   } else {
     mat <- network # input is already an adj matrix
-    d <- colSums(mat) # GET THE DEGREE OF EACH NODE
+    d <- rowSums(mat) # GET THE DEGREE OF EACH NODE
     names(d) <- 1:length(d) # names are simply column numbers
   }
 
@@ -111,7 +111,9 @@ spreadr <- function(
   ## REPEAT PROCESS FOR EACH TIME STEP
   activations = numeric(time * n_nodes)
   message("Initial activations")
-  # print(activations)
+  print(activations)
+  message("degree, d")
+  print(d)
   for (i in seq_len(time)){
     message("time ", i)
     # ACTIVATION AT TIME T - 1
@@ -123,14 +125,14 @@ spreadr <- function(
     # diag(mat_t) <- retention * a_tm1
     mat_t = create_mat_t(mat, a_tm1, d, retention)
     message("mat_t")
-    # print(mat_t)
+    print(mat_t)
 
     # UPDATED ACTIVATION VECTOR
     a_t <- colSums(mat_t)
     a_t <- a_t * (1 - decay)  # decay proportion of activation at the end of each time step
     a_t[a_t < suppress] <- 0 # reduce activation to 0 cells less than suppress parameter
     message("a_t")
-    # print(a_t)
+    print(a_t)
 
     # STORE RESULTS
     activations[((i-1) * n_nodes + 1) : (i * n_nodes)] = a_t

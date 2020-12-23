@@ -11,7 +11,7 @@ NumericVector create_mat_t(NumericMatrix &mat, NumericVector &a_tm1, NumericVect
       // The (i, j) entry represents the activation going from i to j.
       if (i == j) {
         mat_t(i,j) = retention * a_tm1[j];
-      } else if (d[j] == 0) {
+      } else if (d[i] == 0) {
         mat_t(i,j) = 0;
       } else {
         mat_t(i,j) = (1 - retention) * mat(i,j) * (a_tm1[i]/d[i]);
