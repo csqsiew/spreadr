@@ -22,6 +22,7 @@ LazyData: true
 Depends: Rcpp (>= 0.12.5)
 RoxygenNote: 7.1.0
 Imports:
+    assertthat,
     igraph
 Suggests:
     extrafont,
