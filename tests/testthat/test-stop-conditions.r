@@ -47,7 +47,7 @@ test_that("terminates with both time and threshold_to_stop at time", {
   expected <- data.frame(
     node=as.factor(rep(1:2, 4)),
     activation=c(
-    # t=  1,    2,        3,          4,            5
+    # t=  1,    2,        3,          4
       10,10, 5,15, 2.5,17.5, 1.25,18.75),
     time=c(1, 1, 2, 2, 3, 3, 4, 4))
   expect_equal(results, expected)
