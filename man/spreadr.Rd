@@ -9,32 +9,50 @@ spreadr(
   start_run,
   retention = 0.5,
   time = 10,
+  threshold_to_stop = NULL,
   decay = 0,
   suppress = 0,
   create_names = TRUE
 )
 }
 \arguments{
-\item{network}{Network where the spreading occurs. Must be specified. Must be an igraph object with a "name" property or an adjacency matrix.}
+\item{network}{Network where the spreading occurs. Must be specified. Must be
+an igraph object with a "name" property or an adjacency matrix.}
 
-\item{start_run}{A non-empty dataframe with 'node' and 'activation' columns. Must be specified.}
+\item{start_run}{A non-empty dataframe with 'node' and 'activation' columns.
+Must be specified.}
 
-\item{retention}{Proportion of activation that remains in the node from which activation is being spread from. Ranges from 0 to 1. Default is 0.5.}
+\item{retention}{Proportion of activation that remains in the node from which
+activation is being spread from. Ranges from 0 to 1. Default is 0.5.}
 
-\item{time}{Number of time steps to run the spreadr() function for. Default is 10.}
+\item{time}{If not \code{NULL}, the number of time steps to simulate.}
 
-\item{decay}{Proportion of activation that is lost at each time step. Ranges from 0 to 1. Default is 0.}
+\item{threshold_to_stop}{If not \code{NULL}, stop the simulation only when
+there is at least one node with activation value less than
+\code{threshold_to_stop}.}
 
-\item{suppress}{Suppress nodes with a final activation of < x units at each time step to an activation value of 0. Default is 0.}
+\item{decay}{Proportion of activation that is lost at each time step. Ranges
+from 0 to 1. Default is 0.}
 
-\item{create_names}{Name nodes 1:number_of_nodes in case network is missing node names.}
+\item{suppress}{Suppress nodes with a final activation of < x units at each
+time step to an activation value of 0. Default is 0.}
+
+\item{create_names}{Name nodes 1:number_of_nodes in case network is missing
+node names.}
 }
 \value{
-A compiled dataframe with 'node', 'activation' and 'time' columns showing the spread of activation in the network over time.
+A compiled dataframe with 'node', 'activation' and 'time' columns
+  showing the spread of activation in the network over time.
 }
 \description{
 This function takes in a dataframe with 'node' and 'activation' columns, and
-simulates the spread of activation among nodes in a specified network structure.
+simulates the spread of activation among nodes in a specified network
+structure.
+}
+\details{
+At least one of \code{time} or \code{threshold_to_stop} must be
+  non-\code{NULL}. If both are non-\code{NULL}, the simulation stops at the
+  earliest time possible.
 }
 \examples{
 g_d_mat <- matrix(sample(c(0,1), 100, replace = TRUE), 10, 10)
