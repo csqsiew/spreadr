@@ -68,6 +68,9 @@ At least one of \code{time} or \code{threshold_to_stop} must be
     \item{t = 1, suppress}{nodes with activations less than the suppress
       value are given activation = 0.}
     \item{t = 1, record}{activations in the nodes are recorded for output.}
+    \item{t = 1, check}{the termination conditions, time and
+      threshold_to_stop, are checked; the simulation stops immediately if
+      either is satisfied.}
   }
   with t = 2 being the same as t = 1, but substitute 1 for 2.
 }
