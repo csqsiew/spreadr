@@ -19,8 +19,13 @@ spreadr(
 \item{network}{Network where the spreading occurs. Must be specified. Must be
 an igraph object with a "name" property or an adjacency matrix.}
 
-\item{start_run}{A non-empty dataframe with 'node' and 'activation' columns.
-Must be specified.}
+\item{start_run}{A non-empty data.frame. The data.frame must have 'node' and
+'activation' columns. Optionally, it may have a 'time' column. For each
+iteration of the simulation, if the simulation's time point matches the
+'time' column of any row, then the node specified by the 'node' column will
+receive additional activation given by the value in the 'activation'
+column. If the 'time' column is not specified, then 'time' is assumed to
+be 0 (starting state of the simulation).}
 
 \item{retention}{Proportion of activation that remains in the node from which
 activation is being spread from. Ranges from 0 to 1. Default is 0.5.}
@@ -53,6 +58,21 @@ structure.
 At least one of \code{time} or \code{threshold_to_stop} must be
   non-\code{NULL}. If both are non-\code{NULL}, the simulation stops at the
   earliest time possible.
+
+  The simulation iterates like so:
+  \itemize{
+    \item{t = 1, add}{activations in start_run with t = 1 are added to the
+      network.}
+    \item{t = 1, spread}{spreading activation from node to node.}
+    \item{t = 1, decay}{activation in each node decays.}
+    \item{t = 1, suppress}{nodes with activations less than the suppress
+      value are given activation = 0.}
+    \item{t = 1, record}{activations in the nodes are recorded for output.}
+    \item{t = 1, check}{the termination conditions, time and
+      threshold_to_stop, are checked; the simulation stops immediately if
+      either is satisfied.}
+  }
+  with t = 2 being the same as t = 1, but substitute 1 for 2.
 }
 \examples{
 g_d_mat <- matrix(sample(c(0,1), 100, replace = TRUE), 10, 10)
