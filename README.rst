@@ -6,6 +6,25 @@ This package provides the tools for cognitive scientists and psychologists to co
 The algorithmic method implemented in *spreadr* subroutines follows the approach described in Vitevitch, Ercal, and Adagarla (2011, Frontiers), who viewed activation as a fixed cognitive resource that could spread among nodes that were connected to each other via edges or connections (i.e., a network).
 See Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011).
 
+Installation
+############
+
+You can install the stable version via ::
+
+  > install.packages("spreadr")
+
+or the latest version (on the GitHub master branch) ::
+
+  > remotes::install_github("csqsiew/spreadr")
+  > # alternatively
+  > # devtools::install_github("csqsiew/spreadr")
+
+If you encounter which looks like ::
+
+  Error: (converted from warning) package 'Rcpp' was built under R version x.y.z
+
+try setting ``Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true")`` first [#]_.
+
 Development Notes
 #################
 
@@ -19,14 +38,16 @@ However, there is an option to include the replication of the first iteration of
 Simply set the environment variable ``TEST_SEMANTIC_PRIMING`` to any non-empty string.
 For example, within an interactive R session: ::
 
-   > Sys.setenv(TEST_SEMANTIC_PRIMING="")
+   > Sys.setenv(TEST_SEMANTIC_PRIMING="true")
    > devtools::test()
 
 Or, through ``R CMD``: ::
 
    $ cd ..
    $ R CMD build spreadr
-   $ R CMD check spreadr_0.1.0.tar.gz
+   $ TEST_SEMANTIC_PRIMING=true R CMD check spreadr_x.y.z.tar.gz
+
+replacing ``x.y.z`` with the version string.
 
 Invalid ELF header
 ******************
@@ -41,5 +62,6 @@ If you encounter an "invalid ELF header" error, as in ::
 
 Try calling ``devtools::clean_dll`` first [#]_.
 
+.. [#] https://github.com/r-lib/remotes/issues/403#issuecomment-748181946
 .. [#] https://doi.org/10.3758/s13428-018-1186-5
 .. [#] https://github.com/r-lib/devtools/issues/2027#issuecomment-483691800

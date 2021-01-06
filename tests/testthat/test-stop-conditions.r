@@ -21,24 +21,26 @@ test_that("terminates with time only", {
 })
 
 test_that("terminates with threshold_to_stop only", {
-  results <- spreadr(adj_mat, initial, time=NULL, threshold_to_stop=1)
+  results <- spreadr(adj_mat, initial, time=NULL, threshold_to_stop=2.5, decay=0.5)
   expected <- data.frame(
-    node=as.factor(rep(1:2, 5)),
+    node=as.factor(rep(1:2, 3)),
     activation=c(
-    # t=  1,    2,        3,          4,            5
-      10,10, 5,15, 2.5,17.5, 1.25,18.75, 0.625,19.375),
-    time=c(1, 1, 2, 2, 3, 3, 4, 4, 5, 5))
+      20/4,                20/2/2,                    # t=1
+      20/4/4,    (20/2/2 + 20/4/2)/2,                 # t=2
+      20/4/4/4, ((20/2/2 + 20/4/2)/2 + 20/4/4/2)/2),  # t=3
+    time=c(1, 1, 2, 2, 3, 3))
   expect_equal(results, expected)
 })
 
 test_that("terminates with both time and threshold_to_stop at threshold", {
-  results <- spreadr(adj_mat, initial, time=6, threshold_to_stop=1)
+  results <- spreadr(adj_mat, initial, time=6, threshold_to_stop=2.5, decay=0.5)
   expected <- data.frame(
-    node=as.factor(rep(1:2, 5)),
+    node=as.factor(rep(1:2, 3)),
     activation=c(
-    # t=  1,    2,        3,          4,            5
-      10,10, 5,15, 2.5,17.5, 1.25,18.75, 0.625,19.375),
-    time=c(1, 1, 2, 2, 3, 3, 4, 4, 5, 5))
+      20/4,                20/2/2,                    # t=1
+      20/4/4,    (20/2/2 + 20/4/2)/2,                 # t=2
+      20/4/4/4, ((20/2/2 + 20/4/2)/2 + 20/4/4/2)/2),  # t=3
+    time=c(1, 1, 2, 2, 3, 3))
   expect_equal(results, expected)
 })
 
