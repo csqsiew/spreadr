@@ -17,7 +17,7 @@
 #'   spread to neighbouring nodes. If a numeric vector, retentions are assigned
 #'   to nodes according to the order given by \code{V(network)} if
 #'   \code{network} is an \code{\link[igraph:igraph-package]{igraph}} object or
-#'   \code{nrow(network}} if \code{network} is an adjacency matrix.
+#'   \code{nrow(network)} if \code{network} is an adjacency matrix.
 #' @param suppress Number representing the maximum amount of activation in a
 #'   node for it to be set to 0, at each time step.
 #' @param time Positive non-zero integer, or \code{NULL}. If not \code{NULL},

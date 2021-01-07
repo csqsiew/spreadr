@@ -27,10 +27,14 @@ If the \emph{time} column is present, \emph{activation} is added to
 \emph{node} at each \emph{time}. Otherwise, the \emph{activation}s are
 added to their corresponding nodes at \code{t = 0}.}
 
-\item{retention}{Number from 0 to 1 (inclusive) representing the proportion
-of activation that remains in the node (not spread) at each time step from.
-Then, \code{1 - retention} of the activation at each node is spread to
-neighbouring nodes.}
+\item{retention}{Number from 0 to 1 (inclusive) or a numeric vector of such
+numbers of length equals number of nodes in the network. This represents
+the proportion of activation that remains in the node (not spread) at each
+time step. Then, \code{1 - retention} of the activation at each node is
+spread to neighbouring nodes. If a numeric vector, retentions are assigned
+to nodes according to the order given by \code{V(network)} if
+\code{network} is an \code{\link[igraph:igraph-package]{igraph}} object or
+\code{nrow(network)} if \code{network} is an adjacency matrix.}
 
 \item{time}{Positive non-zero integer, or \code{NULL}. If not \code{NULL},
 the number of time steps to simulate before stopping. Otherwise,
