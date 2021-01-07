@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 // create_mat_t
-NumericVector create_mat_t(NumericMatrix& mat, NumericVector& a_tm1, NumericVector& d, double retention);
+NumericVector create_mat_t(NumericMatrix& mat, NumericVector& a_tm1, NumericVector& d, NumericVector& retention);
 RcppExport SEXP _spreadr_create_mat_t(SEXP matSEXP, SEXP a_tm1SEXP, SEXP dSEXP, SEXP retentionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -14,7 +14,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericMatrix& >::type mat(matSEXP);
     Rcpp::traits::input_parameter< NumericVector& >::type a_tm1(a_tm1SEXP);
     Rcpp::traits::input_parameter< NumericVector& >::type d(dSEXP);
-    Rcpp::traits::input_parameter< double >::type retention(retentionSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type retention(retentionSEXP);
     rcpp_result_gen = Rcpp::wrap(create_mat_t(mat, a_tm1, d, retention));
     return rcpp_result_gen;
 END_RCPP
