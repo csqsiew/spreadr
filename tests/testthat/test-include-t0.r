@@ -58,6 +58,7 @@ test_that("animated gif with include_t0", {
     labs(title="t = {current_frame}") +
     transition_manual(time)
 
+  # Silence side-effect prints and messages
   capture.output(
     suppressMessages(
       anim_save("include_t0.gif", g, renderer=gifski_renderer())))

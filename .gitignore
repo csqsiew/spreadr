@@ -2,6 +2,7 @@ tests/testthat/24toynets.csv
 tests/testthat/*.RData
 tests/testthat/study*_rawoutput*
 tests/testthat/include_t0.gif
+tests/testthat/per-node-retention.gif
 .*~$
 doc
 Meta
