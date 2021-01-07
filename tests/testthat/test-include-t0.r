@@ -42,14 +42,19 @@ test_that("animated gif with include_t0", {
   library(gganimate)
 
   g <- ggraph(network, layout) +
+    # Draw edges with arrows, end_cap is padding between arrow tip and node.
     geom_edge_link(arrow=arrow(), end_cap=circle(5, "mm")) +
+    # Draw nodes, including information about activation for transition_manual
     geom_node_point(
       data=results, size=10, mapping=aes(x=x, y=y, colour=activation)) +
+    # Label nodes, nudging a bit to the right for aesthetics
     geom_node_label(aes(label=name), nudge_x=.13) +
+    # State the parameters of the simulation
     annotate(
       "text", x=-0.65, y=0, hjust=0, label=paste0(
         "data.frame(\n  node=as.factor(1), activation=100, time=c(0,2,4,6))\n",
         "retention=0.05")) +
+    # State time point in the title of the plot
     labs(title="t = {current_frame}") +
     transition_manual(time)
 

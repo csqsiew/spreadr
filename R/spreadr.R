@@ -10,10 +10,14 @@
 #'   added to their corresponding nodes at \code{t = 0}.
 #' @param decay Number from 0 to 1 (inclusive) representing the proportion of
 #'   activation that is lost at each time step.
-#' @param retention Number from 0 to 1 (inclusive) representing the proportion
-#'   of activation that remains in the node (not spread) at each time step from.
-#'   Then, \code{1 - retention} of the activation at each node is spread to
-#'   neighbouring nodes.
+#' @param retention Number from 0 to 1 (inclusive) or a numeric vector of such
+#'   numbers of length equals number of nodes in the network. This represents
+#'   the proportion of activation that remains in the node (not spread) at each
+#'   time step. Then, \code{1 - retention} of the activation at each node is
+#'   spread to neighbouring nodes. If a numeric vector, retentions are assigned
+#'   to nodes according to the order given by \code{V(network)} if
+#'   \code{network} is an \code{\link[igraph:igraph-package]{igraph}} object or
+#'   \code{nrow(network}} if \code{network} is an adjacency matrix.
 #' @param suppress Number representing the maximum amount of activation in a
 #'   node for it to be set to 0, at each time step.
 #' @param time Positive non-zero integer, or \code{NULL}. If not \code{NULL},
@@ -85,8 +89,11 @@ spreadr <- function(
       all(sapply(start_run$time, function(x) x == 0 || is.count(x))))
   # is decay is a number between 0 and 1 inclusive?
   assert_that(decay >= 0 && decay <= 1)
-  # is retention is a number between 0 and 1 inclusive?
-  assert_that(retention >= 0 && retention <= 1)
+  # is retention an appropriate number or numeric vector?
+  assert_that(is.numeric(retention))
+  n_nodes <- if (is.igraph(network)) length(V(network)) else nrow(network)
+  assert_that(length(retention) == 1 || length(retention) == n_nodes)
+  assert_that(all(retention >= 0 & retention <= 1))
   # are terminating conditions ok? (time and threshold_to_stop)
   assert_that(
     !(is.null(time) && is.null(threshold_to_stop)),
@@ -113,6 +120,9 @@ spreadr <- function(
   # adjacency matrix
   if (is.igraph(network)) network <- as_adjacency_matrix(network)
   assert_that(all(colnames(network) == rownames(network)))
+
+  # it is easier if we assume retention is always a vector
+  if (length(retention) == 1) retention <- rep(retention, n_nodes)
 
   # variables in the loop:
   # -   d :: numeric integer vector, the degree of each node
