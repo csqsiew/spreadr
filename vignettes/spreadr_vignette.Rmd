@@ -38,7 +38,7 @@ remotes::install_github("csqsiew/spreadr")
 ```
 
 <!-- This ends the tabbed content. https://stackoverflow.com/a/65731436/6910451 -->
-<div></div>
+</div><div>
 
 If you encounter any bugs or issues, please try the development build first.
 The bug or issue may have already been fixed on GitHub, but not yet propagated onto CRAN.
