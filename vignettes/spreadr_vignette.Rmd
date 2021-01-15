@@ -20,17 +20,28 @@ p { text-align: justify }
 
 The notion of spreading activation is a prevalent metaphor in the cognitive sciences; however, the tools to implement spreading activation in a computational simulation are not as readily available. This paper introduces the `spreadr` R package (pronunced 'SPREAD-er'), which can implement spreading activation within a specified network structure. The algorithmic method implemented in `spreadr` subroutines followed the approach described in Vitevitch, Ercal, and Adagarla (2011), who viewed activation as a fixed cognitive resource that could “spread” among connected nodes in a network. See Vitevitch et al. (2011) for more details on the implementation of the spreading activation process.
 
-# Set up
+# Installation {.tabset}
 
-```{r, eval=TRUE}
-options(stringsAsFactors = FALSE) # to prevent strings from being converted to a factor class
-extrafont::loadfonts(quiet=TRUE)
+You can choose to install the stable version from CRAN, or the development build from GitHub.
 
-# install.packages('devtools')
-# library(devtools)
-# install_github('csqsiew/spreadr') # download spreadr from my github page
-library(spreadr)
+## Stable (CRAN)
+
+```{r, eval=FALSE}
+install.packages("spreadr")
 ```
+
+## Development (GitHub)
+
+```{r, eval=FALSE}
+install.packages("remotes")
+remotes::install_github("csqsiew/spreadr")
+```
+
+<!-- This ends the tabbed content. https://stackoverflow.com/a/65731436/6910451 -->
+<div></div>
+
+If you encounter any bugs or issues, please try the development build first.
+The bug or issue may have already been fixed on GitHub, but not yet propagated onto CRAN.
 
 # A worked example
 
