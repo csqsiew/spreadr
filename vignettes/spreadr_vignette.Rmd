@@ -18,7 +18,10 @@ p { text-align: justify }
 
 # Introduction
 
-The notion of spreading activation is a prevalent metaphor in the cognitive sciences; however, the tools to implement spreading activation in a computational simulation are not as readily available. This paper introduces the `spreadr` R package (pronunced 'SPREAD-er'), which can implement spreading activation within a specified network structure. The algorithmic method implemented in `spreadr` subroutines followed the approach described in Vitevitch, Ercal, and Adagarla (2011), who viewed activation as a fixed cognitive resource that could “spread” among connected nodes in a network. See Vitevitch et al. (2011) for more details on the implementation of the spreading activation process.
+The notion of spreading activation is a prevalent metaphor in the cognitive sciences; however, the tools to implement spreading activation in a computational simulation are not as readily available.
+This vignette introduces the spreadr R package (pronunced 'SPREAD-er'), which can implement spreading activation within a specified network structure.
+The algorithmic method implemented in `spreadr` subroutines followed the approach described in Vitevitch, Ercal, and Adagarla (2011), who viewed activation as a fixed cognitive resource that could “spread” among connected nodes in a network.
+See Vitevitch et al. (2011) for more details on the implementation of the spreading activation process.
 
 # Installation {.tabset}
 
@@ -26,49 +29,90 @@ You can choose to install the stable version from CRAN, or the development build
 
 ## Stable (CRAN)
 
-```{r, eval=FALSE}
+```{r eval=FALSE}
 install.packages("spreadr")
 ```
-
-## Development (GitHub)
-
-```{r, eval=FALSE}
-install.packages("remotes")
-remotes::install_github("csqsiew/spreadr")
-```
-
-<!-- This ends the tabbed content. https://stackoverflow.com/a/65731436/6910451 -->
-</div><div>
 
 If you encounter any bugs or issues, please try the development build first.
 The bug or issue may have already been fixed on GitHub, but not yet propagated onto CRAN.
 
-# A worked example
+## Development (GitHub)
 
-## Generate a network object for spreading activation to occur in
+```{r eval=FALSE}
+install.packages("remotes")
+remotes::install_github("csqsiew/spreadr")
+```
 
-First, the network on which the spreading of activation occurs on must be specified. In this example, we use the `sample_gnp` function from the `igraph` R package to generate a network with 20 nodes and undirected links are randomly placed between the nodes with a probability of 0.2. In this step it is important that the `network` argument in the `spreadr` function is either (i) recognized by `igraph` as a network object and has a `name` attribute (to specify meaningful node labels), or (ii) an adjacency matrix (node names will simply be the column numbers).
+If you encounter any bugs or issues, please try the development build first.
+The bug or issue may have already been fixed on GitHub, but not yet propagated onto CRAN.
 
-Note that in this example `spreadr` implements spreading activation process in an unweighted, undirected network, but it is possible to implement the process in a weighted network as well whereby more activation is passed between nodes that have "stronger" edges, or in a directed (asymmetric) network where activation can pass from node i to node j but not necessarily from node j to node i (additional examples below).
+# Example with a phonological network
 
-```{r, warning=FALSE}
+In this example, we will simulate spreading activation in a small sample portion of a phonological network (Ying and Vitevitch 2009) which is automatically loaded with spreadr.
+This phonological network is unweighted and undirected, but spreadr supports weighted and directed graphs as well.
+This makes it is possible to simulate spreading activation in a weighted network where more activation is passed between nodes that have "stronger" edges, or in a directed (asymmetric) network where activation can pass from node *i* to node *j* but not necessarily from node *j* to node *i*.
+
+You may substitute any network in place of this example one.
+
+## Describing the network {.tabset}
+
+The network for spreading activation must be either an `igraph` object or an adjacency matrix.
+
+### Using an igraph object
+
+`pnet`, an `igraph` object representing our sample phonological network is automatically loaded with the spreadr library.
+
+```{r message=FALSE}
+library(spreadr)
+library(igraph)
+
+pnet  # inspect the igraph object
+```
+
+```{r eval=FALSE}
+plot(pnet)
+```
+<!-- Behind the scenes, we want to generate identical plots, so save a layout.
+     This is hidden because I don't want to make the vignette too complex. -->
+```{r echo=FALSE}
+set.seed(1)
+layout <- layout_with_fr(pnet)
+plot(pnet, layout=layout)
+```
+
+Don't worry if your plot does not look exactly as above.
+The layout of the nodes is determined stochastically.
+
+### Using an adjacency matrix
+
+`pnetm`, an adjacency matrix representing our sample phonological network is automatically loaded with the spreadr library.
+
+```{r message=FALSE}
+library(spreadr)
 library(igraph)
 set.seed(1)
 
-g <- sample_gnp(20, 0.2, directed = F, loops = F) # make a random network
-V(g)$name <- paste0('N', as.character(1:gorder(g))) # give some meaningful labels for the 'name' attribute
-
-V(g)$color <- c('blue', rep('white', 19))
-l <- layout_with_fr(g) # to save the layout
-plot(g, l = l, vertex.size = 10, vertex.label.dist = 2, vertex.label.cex = 0.8)
-# the blue node will be assigned activation at t = 0
+pnetm[1:5, 1:5]  # inspect the first few entries
 ```
+
+```{r eval=FALSE}
+plot(graph_from_adjacency_matrix(
+  pnetm, mode="undirected")) # visualise the graph
+```
+```{r echo=FALSE}
+plot(graph_from_adjacency_matrix(
+    pnetm, mode="undirected"),
+  layout=layout)
+```
+
+For those following along: don't worry if your plot does not look exactly as above.
+The layout of the nodes is determined stochastically.
 
 ## Create a dataframe with initial activation values
 
 The user must then specify the initial activation level(s) of node(s) in the network in a dataframe object with two columns labeled node and activation. Below the node labeled “N1” was assigned 20 units of activation. The user can choose to provide different activation values, or initialize more nodes with various activation values.
 
-```{r}
+```{r eval=FALSE}
 initial_df <- data.frame(node = 'N1', activation = 20, stringsAsFactors = F)
 initial_df
 ```
@@ -85,7 +129,7 @@ We are finally ready to run the simulation. In this step, the user must specify 
 (vi) *time*, t: the number of times to run the spreading activation process for.
 (vii) *create_name*: creates numbers/names for nodes if needed, default is TRUE.
 
-```{r}
+```{r eval=FALSE}
 result <- spreadr::spreadr(start_run = initial_df, decay = 0,
                               retention = 0.5, suppress = 0,
                               network = g, time = 10)
@@ -95,7 +139,7 @@ result <- spreadr::spreadr(start_run = initial_df, decay = 0,
 
 The output is a dataframe with 3 columns labeled *node*, *activation*, and *time*, and contains the activation value of each node at each time step. The output can be easily saved as a .csv file for further analysis later. A plot showing the activation levels of each node in the network at each time step is shown below.
 
-```{r}
+```{r eval=FALSE}
 head(result, 10) # view the results
 tail(result, 10)
 # write.csv(result, file = 'result.csv') # save the results
@@ -113,7 +157,7 @@ This section shows how spreadr can be implemented in a weighted network (i.e., t
 
 (i) Weighted, undirected network
 
-```{r}
+```{r eval=FALSE}
 # weighted, undirected network example
 g_w <- g
 set.seed(2)
@@ -134,7 +178,7 @@ As you can see from the plot, the result is slightly different from the original
 
 For this example, we will create the network via an adjacency matrix.
 
-```{r}
+```{r eval=FALSE}
 # unweighted, directed network example
 set.seed(3)
 g_d_mat <- matrix(sample(c(0,1), 100, replace = T), 10, 10) # make a matrix and randomly fill some cells with 1s
@@ -155,7 +199,7 @@ ggplot(data = result_d_t0, aes(x = time, y = activation, color = node, group = n
 The (_i_, _j_) entry of the adjacency matrix should represent the edge going from source node _i_ to target node _j_.
 See below and compare it to the plot above.
 
-```{r}
+```{r eval=FALSE}
 data.frame(node = 1:10, edge = g_d_mat[,1])
 data.frame(node = 1:10, edge = g_d_mat[1,])
 ```
