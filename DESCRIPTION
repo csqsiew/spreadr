@@ -12,7 +12,9 @@ Description: The notion of spreading activation is a prevalent metaphor in the c
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Depends: Rcpp (>= 0.12.5)
+Depends:
+    Rcpp (>= 0.12.5),
+    R (>= 2.10)
 RoxygenNote: 7.1.0
 Imports:
     Matrix,
