@@ -127,7 +127,7 @@ spreadr <- function(
   not_exist_node <- unique(not_exist_node)
   if (length(not_exist_node) > 0) warning(
     "These nodes specified in start_run don't exist in network: ",
-    paste0(not_exist_node, collapse=", "))sss
+    paste0(not_exist_node, collapse=", "))
 
   # it is easier if we assume retention is always a vector
   if (length(retention) == 1) retention <- rep(retention, n_nodes)
