@@ -76,7 +76,7 @@ plot(pnet)
      This is hidden because I don't want to make the vignette too complex. -->
 ```{r echo=FALSE}
 set.seed(1)
-layout <- layout_with_fr(pnet)
+layout <- layout_with_lgl(pnet)
 plot(pnet, layout=layout)
 ```
 
