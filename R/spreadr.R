@@ -121,6 +121,14 @@ spreadr <- function(
   if (is.igraph(network)) network <- as_adjacency_matrix(network)
   assert_that(all(colnames(network) == rownames(network)))
 
+  # is there any node in start_run which does not exist in network?
+  not_exist_idx <- which(!start_run$node %in% colnames(network))
+  not_exist_node <- start_run$node[not_exist_idx]
+  not_exist_node <- unique(not_exist_node)
+  if (length(not_exist_node) > 0) warning(
+    "These nodes specified in start_run don't exist in network: ",
+    paste0(not_exist_node, collapse=", "))sss
+
   # it is easier if we assume retention is always a vector
   if (length(retention) == 1) retention <- rep(retention, n_nodes)
 
