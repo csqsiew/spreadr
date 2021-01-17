@@ -1,5 +1,3 @@
-context("Terminal nodes conserve activation excluding decay")
-
 test_that("GitHub issue 1 is fixed", {
   # See: https://github.com/csqsiew/spreadr/issues/1. Note that the input
   # adjacency matrix is different here. When the issue was written, the input

@@ -37,3 +37,4 @@ Packaged: 2018-10-17 11:19:44 UTC; dwulff
 Author: Cynthia Siew [aut, cre],
   Dirk U. Wulff [ctb]
 Maintainer: Cynthia Siew <cynsiewsq@gmail.com>
+Config/testthat/edition: 3

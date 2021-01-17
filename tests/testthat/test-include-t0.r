@@ -1,5 +1,3 @@
-context("spreadr include_t0=TRUE works well")
-
 library(dplyr)
 library(igraph)
 
@@ -19,14 +17,11 @@ start_run <- data.frame(
   time=c(0, 2, 4, 6))
 
 test_that("error if include_t0 is not flag", {
-  local_edition(3)  # expect_snapshot_error requires opt-into 3rd testthat ed.
   expect_snapshot_error(
     spreadr(network, start_run, time=32, retention=0.1, include_t0=42))
 })
 
 test_that("animated gif with include_t0", {
-  local_edition(3)
-
   layout <- layout_in_circle(network)
   results <- spreadr(
     network, start_run, time=16, retention=0.05, include_t0=TRUE)
