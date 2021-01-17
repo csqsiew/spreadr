@@ -125,7 +125,7 @@ Each row represents the addition of `activation` amount of activation to the nod
 For example, if we wanted the nodes `"beach"` and `"speck"` to have `20` and `10` activation initially, respectively:
 
 ```{r}
-initial <- data.frame(
+start_run <- data.frame(
   node =       c("beach", "speck"),
   activation = c(     20,      10))
 ```
@@ -139,51 +139,78 @@ The initial state before any spreading activation occurs is `time = 0`.
 Therefore, if we wanted the node `"beach"` to have `20` activation initially, then `"speck"` to have `10` activation at `time = 5`:
 
 ```{r}
-initial <- data.frame(
+start_run <- data.frame(
   node =       c("beach", "speck"),
   activation = c(     20,      10),
   time =       c(      0,       5))
 ```
 
-For more details about the meaning of `time` in the spreading activation simulation, please read the spreadr function documentation.
+For more details about the meaning of `time` in the spreading activation simulation, please read the `spreadr` function documentation.
+To keep things simple, the rest of this example will use the version of `start_run` without the `time` column (see the leftmost tab).
+
+```{r echo=FALSE}
+start_run <- data.frame(
+  node =       c("beach", "speck"),
+  activation = c(     20,      10))
+```
 
 ## Run the simulation
 
-We are finally ready to run the simulation. In this step, the user must specify the following arguments and parameters in the `spreadr` function:
+We are now ready to run the simulation through the `spreadr` function.
+This function takes a number of parameters, some of which are listed here.
+Required parameters are written in **bold**, optional parameters are written with their default values (in brackets):
 
-(i) *start_run*: the dataframe (`initial_df`) specified in the previous step that contains the activation values assigned to nodes at t = 0;
-(ii) *decay*, d: the proportion of activation lost at each time step (range from 0 to 1);
-(iii) *retention*, r: the proportion of activation retained in the originator node (range from 0 to 1);
-(iv) *suppress*, d: nodes with activation values lower than this value will have their activations forced to 0. Typically this will be a very small value (e.g., < 0.001);
-(v) *network*: the network (must be an igraph object or a non-zero matrix) on which the spreading of activation occurs on, and
-(vi) *time*, t: the number of times to run the spreading activation process for.
-(vii) *create_name*: creates numbers/names for nodes if needed, default is TRUE.
+i. **network**: Adjacency matrix or `igraph` object representing the network in which to simulate spreading activation
+ii. **start_run**: Non-empty `data.frame` describing the addition of activation into the network.
+iii. *decay* (`0`): Proportion of activation lost at each time step (range from 0 to 1)
+iv. *retention* (`0.5`): Proportion of activation retained in the originator node (range from 0 to 1)
+v. *suppress* (`0`): Nodes with activation values lower than this value will have their activations forced to `0` (typically this will be a very small value e.g. < 0.001)
+vi. *time* (`10`): Number of iterations in the simulation
+vii. *include_t0* (`FALSE`): If the initial state activations should be included in the result `data.frame`
 
-```{r eval=FALSE}
-result <- spreadr::spreadr(start_run = initial_df, decay = 0,
-                              retention = 0.5, suppress = 0,
-                              network = g, time = 10)
+For more details on all the possible function parameters, please read the `spreadr` function documentation.
+
+```{r}
+result <- spreadr(network=pnet, start_run=start_run, include_t0=TRUE)
 ```
 
-## Results
+## Examine the results
 
-The output is a dataframe with 3 columns labeled *node*, *activation*, and *time*, and contains the activation value of each node at each time step. The output can be easily saved as a .csv file for further analysis later. A plot showing the activation levels of each node in the network at each time step is shown below.
+The result is presented as a `data.frame` with columns `node`, `activation`, and `time`.
+Each row contains the activation value of a node at its specified time step.
+
+```{r eval=TRUE}
+head(result)  # inspect the first few rows
+tail(result)  # inspect the last few rows
+```
+
+As a `data.frame`, the `result` can be easily saved as a CSV file for sharing.
 
 ```{r eval=FALSE}
-head(result, 10) # view the results
-tail(result, 10)
-# write.csv(result, file = 'result.csv') # save the results
+write.csv(result, file="result.csv")  # save result as CSV file
+```
 
+You can also easily visualise the `result` using your favourite graphical libraries.
+Here, we use `ggplot2`:
+
+```{r}
 library(ggplot2)
-a1 <- data.frame(node = 'N1', activation = 20, time = 0) # add back initial activation at t = 0
-result_t0 <- rbind(result,a1)
-ggplot(data = result_t0, aes(x = time, y = activation, color = node, group = node)) +
-  geom_point() + geom_line() + ggtitle('unweighted, undirected network') # visualize the results
+ggplot(result, aes(x=time, y=activation, color=node)) +
+  geom_point() +
+  geom_line()
 ```
 
 # Additional examples
 
 This section shows how spreadr can be implemented in a weighted network (i.e., the edges in the network can have different weights) and a directed network (i.e., the edges in the network are not symmetric).
+
+## Using a weighted network
+
+## Using a directed network
+
+## Repeating the simulation across many parameters
+
+## Creating an animation of spreading activation
 
 (i) Weighted, undirected network
 
@@ -233,6 +260,13 @@ See below and compare it to the plot above.
 data.frame(node = 1:10, edge = g_d_mat[,1])
 data.frame(node = 1:10, edge = g_d_mat[1,])
 ```
+
+# Reporting bugs or issues
+
+First, please check that you are on the development build.
+This is because the development build contains a more up-to-date version of spreadr, which may include various bug fixes, as compared to the stable CRAN build.
+
+If your problems persist, please report them on our [Github repository](https://github.com/csqsiew/spreadr/issues).
 
 # References
 
