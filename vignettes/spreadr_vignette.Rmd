@@ -6,6 +6,7 @@ output:
   html_document:
     toc: true
     toc_float: true
+bibliography: sources.bib
 vignette: >
   %\VignetteIndexEntry{Introduction}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,8 +21,7 @@ p { text-align: justify }
 
 The notion of spreading activation is a prevalent metaphor in the cognitive sciences; however, the tools to implement spreading activation in a computational simulation are not as readily available.
 This vignette introduces the spreadr R package (pronunced 'SPREAD-er'), which can implement spreading activation within a specified network structure.
-The algorithmic method implemented in `spreadr` subroutines followed the approach described in Vitevitch, Ercal, and Adagarla (2011), who viewed activation as a fixed cognitive resource that could “spread” among connected nodes in a network.
-See Vitevitch et al. (2011) for more details on the implementation of the spreading activation process.
+The algorithmic method implemented in the `spreadr` function follows the approach described in @vitevitchSimulatingRetrievalHighly2011, who viewed activation as a fixed cognitive resource that could “spread” among connected nodes in a network.
 
 # Installation {.tabset}
 
@@ -48,7 +48,7 @@ The bug or issue may have already been fixed on GitHub, but not yet propagated o
 
 # Example with a phonological network
 
-In this example, we will simulate spreading activation in a small sample portion of a phonological network (Ying and Vitevitch 2009) which is automatically loaded with spreadr.
+In this example, we will simulate spreading activation in a small sample portion of a phonological network [@chanInfluencePhonologicalNeighborhood2009] which is automatically loaded with spreadr.
 This phonological network is unweighted and undirected, but spreadr supports weighted and directed graphs as well.
 This makes it is possible to simulate spreading activation in a weighted network where more activation is passed between nodes that have "stronger" edges, or in a directed (asymmetric) network where activation can pass from node *i* to node *j* but not necessarily from node *j* to node *i*.
 
@@ -169,6 +169,7 @@ vi. *time* (`10`): Number of iterations in the simulation
 vii. *include_t0* (`FALSE`): If the initial state activations should be included in the result `data.frame`
 
 For more details on all the possible function parameters, please read the `spreadr` function documentation.
+For more details on the spreading activation algorithm, see @siewSpreadrPackageSimulate2019 and @vitevitchSimulatingRetrievalHighly2011.
 
 ```{r}
 result <- spreadr(pnet, start_run, include_t0=TRUE)
@@ -306,6 +307,3 @@ sessionInfo()
 ```
 
 # References
-
-Siew, C. S. Q. (under review). spreadr: A R package to simulate spreading activation in a network.
-Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011). Simulating retrieval from a highly clustered network: Implications for spoken word recognition. *Frontiers in Psychology, 2*, 369.
