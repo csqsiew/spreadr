@@ -15,7 +15,7 @@ LazyData: true
 Depends:
     Rcpp (>= 0.12.5),
     R (>= 2.10)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Imports:
     Matrix,
     assertthat,
