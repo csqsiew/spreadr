@@ -54,13 +54,13 @@ This makes it is possible to simulate spreading activation in a weighted network
 
 You may substitute any network in place of this example one.
 
-## Describing the network {.tabset}
+## Describe the network {.tabset}
 
 The network for spreading activation must be either an `igraph` object or an adjacency matrix.
 
 ### Using an igraph object
 
-`pnet`, an `igraph` object representing our sample phonological network is automatically loaded with the spreadr library.
+`pnet`, an `igraph` object with named vertices representing our sample phonological network is automatically loaded with the spreadr library.
 
 ```{r message=FALSE}
 library(spreadr)
@@ -85,7 +85,7 @@ The layout of the nodes is determined stochastically.
 
 ### Using an adjacency matrix
 
-`pnetm`, an adjacency matrix representing our sample phonological network is automatically loaded with the spreadr library.
+`pnetm`, an named adjacency matrix representing our sample phonological network is automatically loaded with the spreadr library.
 
 ```{r message=FALSE}
 library(spreadr)
@@ -108,14 +108,44 @@ plot(graph_from_adjacency_matrix(
 For those following along: don't worry if your plot does not look exactly as above.
 The layout of the nodes is determined stochastically.
 
-## Create a dataframe with initial activation values
+For simplicity, the rest of this example will use `pnet`, an `igraph` representation of `pnetm`.
+This difference is trivial --- the spreadr function accepts both igraph and adjacency matrix.
 
-The user must then specify the initial activation level(s) of node(s) in the network in a dataframe object with two columns labeled node and activation. Below the node labeled “N1” was assigned 20 units of activation. The user can choose to provide different activation values, or initialize more nodes with various activation values.
+## Specify the adding of activation {.tabset}
 
-```{r eval=FALSE}
-initial_df <- data.frame(node = 'N1', activation = 20, stringsAsFactors = F)
-initial_df
+A simulation of spreading activation is uninteresting without some activation to spread.
+In the simplest case, you may specify the initial activation state of each node, from which the simulation will proceed.
+Alternatively, you can also specify the addition of activation at any node, at any time point within the simulation.
+
+### Initial activation only
+
+Initial activation is specified by a `data.frame` (or `data.frame`-like object, such as a `tibble`) with columns `node` and `activation`.
+Each row represents the addition of `activation` amount of activation to the node with name `node`, at the initial pre-spreading activation step of the simulation.
+
+For example, if we wanted the nodes `"beach"` and `"speck"` to have `20` and `10` activation initially, respectively:
+
+```{r}
+initial <- data.frame(
+  node =       c("beach", "speck"),
+  activation = c(     20,      10))
 ```
+
+### Activation at specified time points
+
+The adding of activation at specified time points is specified by a `data.frame` (or `data.frame`-like object, such as a `tibble`) with columns `node`, `activation`, and `time`.
+Each row represents the addition of `activation` amount of activation to the node with name `node` at time point `time`.
+The initial state before any spreading activation occurs is `time = 0`.
+
+Therefore, if we wanted the node `"beach"` to have `20` activation initially, then `"speck"` to have `10` activation at `time = 5`:
+
+```{r}
+initial <- data.frame(
+  node =       c("beach", "speck"),
+  activation = c(     20,      10),
+  time =       c(      0,       5))
+```
+
+For more details about the meaning of `time` in the spreading activation simulation, please read the spreadr function documentation.
 
 ## Run the simulation
 
