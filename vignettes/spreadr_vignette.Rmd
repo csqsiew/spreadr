@@ -126,8 +126,8 @@ For example, if we wanted the nodes `"beach"` and `"speck"` to have `20` and `10
 
 ```{r}
 start_run <- data.frame(
-  node =       c("beach", "speck"),
-  activation = c(     20,      10))
+  node=      c("beach", "speck"),
+  activation=c(     20,      10))
 ```
 
 ### Activation at specified time points
@@ -171,7 +171,7 @@ vii. *include_t0* (`FALSE`): If the initial state activations should be included
 For more details on all the possible function parameters, please read the `spreadr` function documentation.
 
 ```{r}
-result <- spreadr(network=pnet, start_run=start_run, include_t0=TRUE)
+result <- spreadr(pnet, start_run, include_t0=TRUE)
 ```
 
 ## Examine the results
@@ -202,63 +202,94 @@ ggplot(result, aes(x=time, y=activation, color=node)) +
 
 # Additional examples
 
-This section shows how spreadr can be implemented in a weighted network (i.e., the edges in the network can have different weights) and a directed network (i.e., the edges in the network are not symmetric).
+Here, we address some common "how do I do *X*?" questions by example.
 
 ## Using a weighted network
 
+Simply pass a weighted network (`igraph` object or adjacency matrix) to the `spreadr` function.
+
+Let's take a simple three-node network as example:
+
+```{r}
+weighted_network <- matrix(
+  c(0, 1, 9,
+    1, 0, 0,
+    9, 0, 0), nrow=3, byrow=TRUE)
+colnames(weighted_network) <- c("a", "b", "c")
+rownames(weighted_network) <- c("a", "b", "c")
+
+# To visualise the network only --- this is not necessary for spreadr
+weighted_igraph <- graph_from_adjacency_matrix(
+  weighted_network, mode="undirected", weighted=TRUE)
+plot(weighted_igraph, edge.width=E(weighted_igraph)$weight)
+```
+
+If we let the node `"a"` have initial `activation = 10`, we should expect to see 9 units of activation go to `"c"`, and 1 unit to `"b"`, for `retention = 0`.
+
+```{r}
+spreadr(
+  weighted_network, data.frame(node="a", activation=10),
+  time=1, retention=0, include_t0=TRUE)
+```
+
 ## Using a directed network
 
-## Repeating the simulation across many parameters
+Simply pass a directed network (`igraph` object or adjacency matrix) to the `spreadr` function.
 
-## Creating an animation of spreading activation
+Let's take a simple three-node network as example:
 
-(i) Weighted, undirected network
+```{r}
+directed_network <- matrix(
+  c(0, 1, 0,
+    0, 0, 1,
+    0, 0, 0), nrow=3, byrow=TRUE)
+colnames(directed_network) <- c("a", "b", "c")
+rownames(directed_network) <- c("a", "b", "c")
 
-```{r eval=FALSE}
-# weighted, undirected network example
-g_w <- g
-set.seed(2)
-E(g_w)$weight <- runif(gsize(g_w)) # make the edges in the network have different weights ranging from 0 to 1 (excluding extreme values)
-
-result_w <- spreadr::spreadr(start_run = initial_df, decay = 0,
-                              retention = 0.5, suppress = 0,
-                              network = g_w, time = 10)
-
-result_w_t0 <- rbind(result_w, a1) # add back initial activation at t = 0
-ggplot(data = result_w_t0, aes(x = time, y = activation, color = node, group = node)) +
-  geom_point() + geom_line() + ggtitle('weighted, undirected network') # visualize the results
+# To visualise the network only --- this is not necessary for spreadr
+directed_igraph <- graph_from_adjacency_matrix(
+  directed_network, mode="directed")
+plot(directed_igraph, edge.width=E(directed_igraph)$weight)
 ```
 
-As you can see from the plot, the result is slightly different from the original example with unweighted edges. More activation is passed to the node that is more "strongly" connected to the originator node.
+If we let the node `"b"` have initial `activation = 10`, we should expect to see all 10 units of activation go to `"c"`, and none go to `"a"`, for `retention = 0`.
 
-(ii) Unweighted, directed network
-
-For this example, we will create the network via an adjacency matrix.
-
-```{r eval=FALSE}
-# unweighted, directed network example
-set.seed(3)
-g_d_mat <- matrix(sample(c(0,1), 100, replace = T), 10, 10) # make a matrix and randomly fill some cells with 1s
-diag(g_d_mat) <- 0 # remove self-loops
-g_d_mat
-
-# spreadr will work on an adjacency matrix too
-result_d <- spreadr::spreadr(start_run = data.frame(node = 1, activation = 20, stringsAsFactors = F),
-                             decay = 0,
-                              retention = 0.5, suppress = 0,
-                              network = g_d_mat, time = 10)
-
-result_d_t0 <- rbind(result_d, data.frame(node = 1, activation = 20, time = 0)) # add back initial activation at t = 0
-ggplot(data = result_d_t0, aes(x = time, y = activation, color = node, group = node)) +
-  geom_point() + geom_line() + ggtitle('unweighted, directed network')
+```{r}
+spreadr(
+  directed_network, data.frame(node="b", activation=10),
+  time=1, retention=0, include_t0=TRUE)
 ```
 
-The (_i_, _j_) entry of the adjacency matrix should represent the edge going from source node _i_ to target node _j_.
-See below and compare it to the plot above.
+## Repeating the simulation across different parameters
 
-```{r eval=FALSE}
-data.frame(node = 1:10, edge = g_d_mat[,1])
-data.frame(node = 1:10, edge = g_d_mat[1,])
+There are a few ways to do this, but here we will showcase a relatively simple method using `data.frame`s.
+
+Suppose we want to simulate spreading activation across four different parameter sets of *(retention, decay*): (0, 0), (0.5, 0), (0, 0.5), and (0.5, 0.5).
+We would first record down all those parameters which will differ into a `data.frame`:
+
+```{r}
+params <- data.frame(
+  retention=c(0, 0.5,   0, 0.5),
+  decay=    c(0,   0, 0.5, 0.5))
+```
+
+Then, we prepare the common parameters that will *not* differ.
+
+```{r}
+network <- matrix(
+  c(0, 1,
+    0, 0), nrow=2, byrow=TRUE)
+start_run <- data.frame(node=1, activation=10)
+```
+
+Now, to run the simulate once for each set of different parameters, we simply `apply` over the rows of `params`.
+
+```{r}
+apply(params, 1, function(row)
+  spreadr(
+    network, start_run,
+    time=2, include_t0=TRUE,
+    retention=row[1], decay=row[2]))
 ```
 
 # Reporting bugs or issues
@@ -267,6 +298,12 @@ First, please check that you are on the development build.
 This is because the development build contains a more up-to-date version of spreadr, which may include various bug fixes, as compared to the stable CRAN build.
 
 If your problems persist, please report them on our [Github repository](https://github.com/csqsiew/spreadr/issues).
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
 
 # References
 
