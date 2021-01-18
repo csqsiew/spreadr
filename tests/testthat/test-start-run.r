@@ -1,5 +1,3 @@
-context("spreadr start_run works well")
-
 adj_mat <- matrix(
   c(0, 1,
     0, 0), nrow=2, byrow=TRUE)

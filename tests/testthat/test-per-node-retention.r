@@ -1,5 +1,3 @@
-context("spreadr numeric vector retentions work well")
-
 network <- graph_from_adjacency_matrix(matrix(
   c(0, 1, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 1, 0, 0, 0, 0, 0, 0,
@@ -15,14 +13,11 @@ V(network)$name <- 1:9
 start_run <- data.frame(node=as.factor(c(1, 4, 7)), activation=100, time=0)
 
 test_that("error if length of retention numeric vector is wrong", {
-  local_edition(3)  # expect_snapshot_error requires opt-into 3rd testthat ed.
   expect_snapshot_error(
     spreadr(network, start_run, time=5, retention=c(0.5, 0.7), include_t0=TRUE))
 })
 
 test_that("animated gif with per-node retention", {
-  local_edition(3)
-
   layout <- layout_on_grid(network)
   results <- spreadr(
     network, start_run, time=5, retention=retention, include_t0=TRUE)

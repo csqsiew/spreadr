@@ -1,4 +1,4 @@
-context("Simulations from Siew 2019 in Behavior Research Methods")
+# Here, we test simulations from:
 # Siew, Cynthia S. Q. 2019. ‘Spreadr: An R Package to Simulate Spreading
 # Activation in a Network’. Behavior Research Methods 51 (2): 910–29.
 # https://doi.org/10.3758/s13428-018-1186-5.
@@ -8,36 +8,34 @@ library(fs)
 # We download the test datasets and expected output from spreadr's OSF
 # repository at https://osf.io/a9bv6/. The downloaded files are excluded from
 # the package tarball with .Rbuildignore.
-setup({
-  # Download files
-  download_urls <- list(
-    # Lexical retrieval simulation
-    "ego2hopnets_24.RData"    = "https://osf.io/download/vucnf/",
-    "study1_rawoutput.zip"    = "https://osf.io/download/vy42b/",
-    "24toynets.csv"           = "https://osf.io/download/9wz6s/",
-    # False memory simulation
-    "study2_rawoutput.zip"    = "https://osf.io/download/6xzgq/",
-    # Semantic priming simulation
-    "usf.RData"               = "https://osf.io/download/gwyc8/",
-    "spp_200_pairs.RData"     = "https://osf.io/download/h42ay/",
-    # Because these simulations run for many iterations (800), each on a rather
-    # large network (10k nodes, 63k edges), they will take a /very/ long time to
-    # test. Instead, we prepare to test only the first pair of words, for one
-    # retention value of 0.8, and we really run that test only if the user says
-    # to do so, by specifying an environment variable TEST_SEMANTIC_PRIMING to
-    # any non-empty string.
-    # "spp_retention_0.2.RData" = "https://osf.io/download/yjt4g/",
-    # "spp_retention_0.4.RData" = "https://osf.io/download/f48th/",
-    # "spp_retention_0.6.RData" = "https://osf.io/download/uk6rz/",
-    "spp_retention_0.8.RData" = "https://osf.io/download/ybq6u/")
-  sapply(names(download_urls), function(fn) {
-    if (!file_exists(fn)) download.file(download_urls[[fn]], fn, quiet=TRUE)
-  })
-  # Extract zipped files
-  zip_files <- Filter(function(fn) grepl("\\.zip$", fn), names(download_urls))
-  sapply(zip_files, function(zfn) {
-    if (!dir_exists(gsub("\\.zip$", "", zfn))) unzip(zfn)
-  })
+download_urls <- list(
+  # Lexical retrieval simulation
+  "ego2hopnets_24.RData"    = "https://osf.io/download/vucnf/",
+  "study1_rawoutput.zip"    = "https://osf.io/download/vy42b/",
+  "24toynets.csv"           = "https://osf.io/download/9wz6s/",
+  # False memory simulation
+  "study2_rawoutput.zip"    = "https://osf.io/download/6xzgq/",
+  # Semantic priming simulation
+  "usf.RData"               = "https://osf.io/download/gwyc8/",
+  "spp_200_pairs.RData"     = "https://osf.io/download/h42ay/",
+  # Because these simulations run for many iterations (800), each on a rather
+  # large network (10k nodes, 63k edges), they will take a /very/ long time to
+  # test. Instead, we prepare to test only the first pair of words, for one
+  # retention value of 0.8, and we really run that test only if the user says
+  # to do so, by specifying an environment variable TEST_SEMANTIC_PRIMING to
+  # any non-empty string.
+  # "spp_retention_0.2.RData" = "https://osf.io/download/yjt4g/",
+  # "spp_retention_0.4.RData" = "https://osf.io/download/f48th/",
+  # "spp_retention_0.6.RData" = "https://osf.io/download/uk6rz/",
+  "spp_retention_0.8.RData" = "https://osf.io/download/ybq6u/")
+# Download files
+sapply(names(download_urls), function(fn) {
+  if (!file_exists(fn)) download.file(download_urls[[fn]], fn, quiet=TRUE)
+})
+# Extract files
+zip_files <- Filter(function(fn) grepl("\\.zip$", fn), names(download_urls))
+sapply(zip_files, function(zfn) {
+  if (!dir_exists(gsub("\\.zip$", "", zfn))) unzip(zfn)
 })
 
 load("ego2hopnets_24.RData")
