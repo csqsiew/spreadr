@@ -2,7 +2,7 @@
 
     length(retention) not equal to 1 or length(retention) not equal to n_nodes
 
-# animated gif with per-node retention
+# per-node retention works well
 
     Code
       results

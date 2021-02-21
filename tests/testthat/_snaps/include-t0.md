@@ -2,7 +2,7 @@
 
     include_t0 is not a flag (a length one logical vector).
 
-# animated gif with include_t0
+# include_t0 works well
 
     Code
       results

@@ -27,6 +27,7 @@ Suggests:
     gganimate,
     ggplot2,
     ggraph,
+    gifski,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

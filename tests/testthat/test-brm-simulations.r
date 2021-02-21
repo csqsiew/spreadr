@@ -91,10 +91,10 @@ test_that("Semantic priming simulation: pair 1, retention 0.8", {
   skip_if(
     Sys.getenv("TEST_SEMANTIC_PRIMING") == "",
     paste0(c(
-      "This test takes a few minutes, during which it will use up all",
-      "system memory on most personal computers and laptops. If you are sure",
-      "you would like to run this test, set the environment variable",
-      "TEST_SEMANTIC_PRIMING to any non-empty string."),
+      "This test takes a few minutes, during which it will use up all system memory",
+      "on most personal computers and laptops. If you are sure you would like to run",
+      "this test, set the environment variable TEST_SEMANTIC_PRIMING to any non-empty ",
+      "string."),
       collapse="\n"))
   start_run <- data.frame(
     node=spp_200_pairs$Prime[1], activation=100, stringsAsFactors=FALSE)

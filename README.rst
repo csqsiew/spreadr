@@ -36,8 +36,8 @@ To install these developer dependencies, use ::
 
   devtools::install_dev_deps()
 
-Testing the semantic priming simulation
-***************************************
+Testing with the semantic priming simulation
+********************************************
 
 By default, running the test suite will replicate most of the simulations in the article describing *spreadr* [#]_ except for the last, *"Simulation Study 3: Semantic priming"*.
 That simulation requires 800 iterations each taking a few minutes, making it impractical for testing.
@@ -56,6 +56,26 @@ Or, through ``R CMD``: ::
    $ TEST_SEMANTIC_PRIMING=true R CMD check spreadr_x.y.z.tar.gz
 
 replacing ``x.y.z`` with the version string.
+
+Testing with animated GIFs
+**************************
+
+There are some snapshot tests checking for the generation the animated GIFs:
+
+<div align="center">
+  <img src="./tests/testthat/_snaps/include-t0/include_t0.gif">
+</div>
+
+<div align="center">
+  <img src="./tests/testthat/_snaps/per-node-retention/per-node-retention.gif">
+</div>
+
+By default, these tests are not run.
+This is because (i) we expect GIF generation to differ trivially with development environments (so that the tests fail, but not in meaningful ways), and (ii) the spreadr results underlying the GIF is always tested before the GIF generation.
+
+However, the GIF generation snapshot tests are still available for use.
+Simply set the environment variable ``TEST_ANIMATED_GIF`` to any non-empty string, just as with the semantic priming simulation tests.
+These tests can be useful for you to visualise the spreadr results.
 
 Invalid ELF header
 ******************
