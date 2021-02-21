@@ -21,7 +21,7 @@ test_that("animated gif with per-node retention", {
   layout <- layout_on_grid(network)
   results <- spreadr(
     network, start_run, time=5, retention=retention, include_t0=TRUE)
-  results <- suppressMessages(left_join(
+  results <- suppressMessages(dplyr::left_join(
     results, data.frame(node=as.factor(1:9), x=layout[,1], y=layout[,2])))
   expect_snapshot(results)
 

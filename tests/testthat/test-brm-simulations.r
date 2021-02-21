@@ -52,8 +52,8 @@ for (retention in retentions) {
           decay=0, retention=retention, suppress=0, time=10)
         expected <- read.csv(
           sprintf(
-            "study1_rawoutput/%d_%s_%.1f.csv",
-            i, v2011$name[i], retention),
+            "study1_rawoutput/%d_%s_%.1f.csv", i, v2011$name[i], retention),
+          stringsAsFactors=TRUE,
           colClasses=c("NULL", NA, NA, NA))  # ignore the first column
         expect_equal(results, expected)
       }
@@ -71,8 +71,8 @@ for (retention in retentions) {
           decay=0, retention=retention, suppress=0, time=10)
         expected <- read.csv(
           sprintf(
-            "study2_rawoutput/%d_%s_%.1f_sim2.csv",
-            i, v2011$name[i], retention),
+            "study2_rawoutput/%d_%s_%.1f_sim2.csv", i, v2011$name[i], retention),
+          stringsAsFactors=TRUE,
           colClasses=c("NULL", NA, NA, NA))  # ignore the first column
         expect_equal(results, expected)
       }

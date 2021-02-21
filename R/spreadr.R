@@ -180,7 +180,8 @@ spreadr <- function(
 
   nodes <- rep(colnames(network), current_time+1)
   is <- rep(0:(current_time), rep(n_nodes, current_time+1))
-  return_df <- data.frame(node=nodes, activation=activations, time=is)
+  return_df <- data.frame(
+    node=nodes, activation=activations, time=is, stringsAsFactors=TRUE)
 
   if (!include_t0) {
     return_df <- subset(return_df, time != 0)

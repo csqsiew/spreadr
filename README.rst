@@ -28,11 +28,19 @@ try setting ``Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true")`` first [#]_.
 Development Notes
 #################
 
+Install developer dependencies
+******************************
+
+There are some additional packages that need to be installed for the *spreadr* developer, e.g. those used in the unit tests.
+To install these developer dependencies, use ::
+
+  devtools::install_dev_deps()
+
 Testing the semantic priming simulation
 ***************************************
 
 By default, running the test suite will replicate most of the simulations in the article describing *spreadr* [#]_ except for the last, *"Simulation Study 3: Semantic priming"*.
-That simulation requires 800 iterations each of taking a few minutes, making it impractical for testing.
+That simulation requires 800 iterations each taking a few minutes, making it impractical for testing.
 
 However, there is an option to include the replication of the first iteration of that simulation, with ``retention = 0.8``.
 Simply set the environment variable ``TEST_SEMANTIC_PRIMING`` to any non-empty string.

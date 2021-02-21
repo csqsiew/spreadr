@@ -1,4 +1,3 @@
-library(dplyr)
 library(igraph)
 
 network <- graph_from_adjacency_matrix(matrix(
@@ -25,7 +24,7 @@ test_that("animated gif with include_t0", {
   layout <- layout_in_circle(network)
   results <- spreadr(
     network, start_run, time=16, retention=0.05, include_t0=TRUE)
-  results <- suppressMessages(left_join(
+  results <- suppressMessages(dplyr::left_join(
     results,
     data.frame(node=as.factor(1:8), x=layout[,1], y=layout[,2])))
   expect_snapshot(results)
