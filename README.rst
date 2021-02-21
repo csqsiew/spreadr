@@ -34,7 +34,7 @@ Install developer dependencies
 There are some additional packages that need to be installed for the *spreadr* developer, e.g. those used in the unit tests.
 To install these developer dependencies, use ::
 
-  devtools::install_dev_deps()
+  > devtools::install_dev_deps()
 
 Testing with the semantic priming simulation
 ********************************************
@@ -60,16 +60,7 @@ replacing ``x.y.z`` with the version string.
 Testing with animated GIFs
 **************************
 
-There are some snapshot tests checking for the generation the animated GIFs:
-
-<div align="center">
-  <img src="./tests/testthat/_snaps/include-t0/include_t0.gif">
-</div>
-
-<div align="center">
-  <img src="./tests/testthat/_snaps/per-node-retention/per-node-retention.gif">
-</div>
-
+There are some snapshot tests checking for the generation the animated GIFs.
 By default, these tests are not run.
 This is because (i) we expect GIF generation to differ trivially with development environments (so that the tests fail, but not in meaningful ways), and (ii) the spreadr results underlying the GIF is always tested before the GIF generation.
 
