@@ -32,6 +32,9 @@
 #' @param create_names Boolean flag indicating if nodes should be automatically
 #'   named (\code{1:n}, where \code{n} is the number of nodes) in case they are
 #'   missing.
+#' @param never_stop Boolean flag indicating if the simulation should be stopped
+#'   if there have been too many iterations (so that there might be an infinite
+#'   loop).
 #'
 #' @return A \code{\link[base]{data.frame}} with \emph{node}, \emph{activation}
 #'   and \emph{time} columns representing the spread of activation in the network
@@ -75,7 +78,7 @@
 #' @export
 spreadr <- function(
     network, start_run, retention=0.5, time=10, threshold_to_stop=NULL,
-    decay=0, suppress=0, include_t0=FALSE, create_names=TRUE
+    decay=0, suppress=0, include_t0=FALSE, create_names=TRUE, never_stop=FALSE
   ){
 
   # is network an igraph or square matrix-like object?
@@ -174,6 +177,12 @@ spreadr <- function(
     # check termination
     if (!is.null(time) && current_time >= time) break
     if (!is.null(threshold_to_stop) && all(a_t < threshold_to_stop)) break
+    if (is.null(time) && decay == 0 && !never_stop && current_time > 10000) {
+      warning(
+        "Stopping because there might potentially be an infinite loop. ",
+        "Set NEVER_STOP=TRUE to override.")
+      break
+    }
 
     current_time <- current_time + 1
   }

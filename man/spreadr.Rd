@@ -13,7 +13,8 @@ spreadr(
   decay = 0,
   suppress = 0,
   include_t0 = FALSE,
-  create_names = TRUE
+  create_names = TRUE,
+  never_stop = FALSE
 )
 }
 \arguments{
@@ -57,6 +58,10 @@ by default for back-compatibility.}
 \item{create_names}{Boolean flag indicating if nodes should be automatically
 named (\code{1:n}, where \code{n} is the number of nodes) in case they are
 missing.}
+
+\item{never_stop}{Boolean flag indicating if the simulation should be stopped
+if there have been too many iterations (so that there might be an infinite
+loop).}
 }
 \value{
 A \code{\link[base]{data.frame}} with \emph{node}, \emph{activation}
