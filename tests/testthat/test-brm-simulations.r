@@ -4,6 +4,7 @@
 # https://doi.org/10.3758/s13428-018-1186-5.
 
 library(fs)
+skip_on_cran()  # Can't seem to download stuff on CRAN
 
 # We download the test datasets and expected output from spreadr's OSF
 # repository at https://osf.io/a9bv6/. The downloaded files are excluded from
