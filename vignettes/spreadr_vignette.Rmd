@@ -1,5 +1,5 @@
 ---
-title: 'spreadr: A R package to simulate spreading activation in a network'
+title: "spreadr: A R package to simulate spreading activation in a network"
 author: "Cynthia S. Q. Siew"
 date: "`r Sys.Date()`"
 output:
@@ -66,7 +66,7 @@ The network for spreading activation must be either an `igraph` object or an adj
 library(spreadr)
 library(igraph)
 
-pnet  # inspect the igraph object
+data("pnet")  # load and inspect the igraph object
 ```
 
 ```{r eval=FALSE}
@@ -92,6 +92,7 @@ library(spreadr)
 library(igraph)
 set.seed(1)
 
+data("pnetm")
 pnetm[1:5, 1:5]  # inspect the first few entries
 ```
 

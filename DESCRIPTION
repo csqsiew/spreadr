@@ -20,18 +20,19 @@ RoxygenNote: 7.1.1
 Imports:
     Matrix,
     assertthat,
-    igraph
+    igraph,
+    extrafont,
+    ggplot2
 Suggests:
     dplyr,
-    extrafont,
     fs,
     gganimate,
-    ggplot2,
     ggraph,
     gifski,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
+LazyData: true
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 NeedsCompilation: yes
