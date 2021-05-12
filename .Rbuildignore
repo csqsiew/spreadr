@@ -3,7 +3,8 @@
 README.rst
 tests/testthat/24toynets.csv
 tests/testthat/.*RData$
-tests/testthat/study\\d_rawoutput/.*$
+tests/testthat/study\d_rawoutput/.*$
+tests/testthat/study\d_rawoutput.zip
 tests/testthat/.*gif$
 ^doc$
 ^Meta$
