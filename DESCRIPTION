@@ -21,7 +21,6 @@ Imports:
     Matrix,
     assertthat,
     igraph,
-    extrafont,
     ggplot2
 Suggests:
     dplyr,
