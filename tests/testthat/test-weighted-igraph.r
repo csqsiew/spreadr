@@ -1,6 +1,6 @@
 # See https://github.com/csqsiew/spreadr/issues/4.
 
-library(tibble)
+library(igraph)
 
 test_that("Weighted graph, when represented by an igraph, works", {
   weighted_network <- graph_from_literal(a-b, a-c)

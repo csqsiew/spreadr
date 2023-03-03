@@ -71,7 +71,7 @@
 #'
 #' @importFrom assertthat assert_that is.count is.flag has_name
 #' @importFrom igraph as_adjacency_matrix graph_from_adjacency_matrix is.igraph
-#'   V V<-
+#'   V V<- E
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib spreadr
 #'
@@ -121,7 +121,10 @@ spreadr <- function(
 
   # we work with adjacency matrices, so if network is.igraph, convert to an
   # adjacency matrix
-  if (is.igraph(network)) network <- as_adjacency_matrix(network)
+  if (is.igraph(network) && is.null(E(network)$weight))
+    network <- as_adjacency_matrix(network)
+  else if (is.igraph(network) && !is.null(E(network)$weight))
+    network <- as_adjacency_matrix(network, attr="weight")
   assert_that(all(colnames(network) == rownames(network)))
 
   # is there any node in start_run which does not exist in network?
