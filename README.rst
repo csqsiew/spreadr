@@ -9,7 +9,9 @@ See Vitevitch, M. S., Ercal, G., & Adagarla, B. (2011).
 Installation
 ############
 
-You can install the stable version via ::
+*Note: spreadr cannot be downloaded from CRAN as of September 2025, please download the version on Github instead.*
+
+~~You can install the stable version via~~
 
   > install.packages("spreadr")
 
