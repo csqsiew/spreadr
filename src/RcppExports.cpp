@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // create_mat_t
 NumericVector create_mat_t(NumericMatrix& mat, NumericVector& a_tm1, NumericVector& d, NumericVector& retention);
 RcppExport SEXP _spreadr_create_mat_t(SEXP matSEXP, SEXP a_tm1SEXP, SEXP dSEXP, SEXP retentionSEXP) {

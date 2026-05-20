@@ -230,7 +230,7 @@ If we let the node `"a"` have initial `activation = 10`, we should expect to see
 
 ```{r}
 spreadr(
-  weighted_network, data.frame(node="a", activation=10),
+  weighted_igraph, data.frame(node="a", activation=10),
   time=1, retention=0, include_t0=TRUE)
 ```
 
@@ -258,7 +258,7 @@ If we let the node `"b"` have initial `activation = 10`, we should expect to see
 
 ```{r}
 spreadr(
-  directed_network, data.frame(node="b", activation=10),
+  directed_igraph, data.frame(node="b", activation=10),
   time=1, retention=0, include_t0=TRUE)
 ```
 

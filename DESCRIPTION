@@ -15,7 +15,6 @@ Encoding: UTF-8
 Depends:
     Rcpp (>= 0.12.5),
     R (>= 2.10)
-RoxygenNote: 7.1.1
 Imports:
     Matrix,
     assertthat,
@@ -40,3 +39,4 @@ Author: Cynthia Siew [aut, cre],
   Ning Yuan Lee [ctb]
 Maintainer: Cynthia Siew <cynsiewsq@gmail.com>
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0
