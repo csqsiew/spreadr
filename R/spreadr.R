@@ -70,8 +70,7 @@
 #' tail(results, 10)
 #'
 #' @importFrom assertthat assert_that is.count is.flag has_name
-#' @importFrom igraph as_adjacency_matrix graph_from_adjacency_matrix is.igraph
-#'   V V<- E
+#' @importFrom igraph as_adjacency_matrix graph_from_adjacency_matrix is_igraph V V<- E
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib spreadr
 #'
@@ -82,7 +81,7 @@ spreadr <- function(
   ){
 
   # is network an igraph or square matrix-like object?
-  assert_that(is.igraph(network) ||
+  assert_that(is_igraph(network) ||
     length(dim(network)) == 2 && dim(network)[1] == dim(network)[2])
   # is start_run in the correct format?
   assert_that(is.data.frame(start_run))
@@ -94,7 +93,7 @@ spreadr <- function(
   assert_that(decay >= 0 && decay <= 1)
   # is retention an appropriate number or numeric vector?
   assert_that(is.numeric(retention))
-  n_nodes <- if (is.igraph(network)) length(V(network)) else nrow(network)
+  n_nodes <- if (is_igraph(network)) length(V(network)) else nrow(network)
   assert_that(length(retention) == 1 || length(retention) == n_nodes)
   assert_that(all(retention >= 0 & retention <= 1))
   # are terminating conditions ok? (time and threshold_to_stop)
@@ -104,7 +103,7 @@ spreadr <- function(
   assert_that(is.null(time) || is.count(time))
   assert_that(is.null(threshold_to_stop) || threshold_to_stop > 0)
   # are node names ok?
-  does_network_have_names <- if (is.igraph(network))
+  does_network_have_names <- if (is_igraph(network))
     !is.null(V(network)$name) else
     !is.null(colnames(network)) || !is.null(rownames(network))
   assert_that(create_names || does_network_have_names)
@@ -112,20 +111,23 @@ spreadr <- function(
   assert_that(is.flag(include_t0))
 
   # honour create_names: if TRUE, add node names
-  if (create_names && !does_network_have_names && is.igraph(network)) {
+  if (create_names && !does_network_have_names && is_igraph(network)) {
     V(network)$name <- 1:length(V(network))
-  } else if (create_names && !does_network_have_names && !is.igraph(network)) {
+  } else if (create_names && !does_network_have_names && !is_igraph(network)) {
     colnames(network) <- 1:ncol(network)
     rownames(network) <- 1:nrow(network)
   }
 
-  # we work with adjacency matrices, so if network is.igraph, convert to an
+  # we work with adjacency matrices, so if network is_igraph, convert to an
   # adjacency matrix
-  if (is.igraph(network) && is.null(E(network)$weight))
+  if (is_igraph(network) && is.null(E(network)$weight))
     network <- as_adjacency_matrix(network)
-  else if (is.igraph(network) && !is.null(E(network)$weight))
+  if (is_igraph(network) && !is.null(E(network)$weight))
     network <- as_adjacency_matrix(network, attr="weight")
   assert_that(all(colnames(network) == rownames(network)))
+
+  # does the adjmat have any negative values (negative edges)?
+  assert_that(all(as.matrix(network) >= 0))
 
   # is there any node in start_run which does not exist in network?
   not_exist_idx <- which(!start_run$node %in% colnames(network))

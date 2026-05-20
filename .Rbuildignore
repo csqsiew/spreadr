@@ -8,3 +8,11 @@ tests/testthat/study\d_rawoutput.zip
 tests/testthat/.*gif$
 ^doc$
 ^Meta$
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.positai$
+^\.claude$
+^README\.Rmd$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

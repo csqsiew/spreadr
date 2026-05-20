@@ -8,3 +8,6 @@ doc
 Meta
 *.o
 *.so
+.Rproj.user
+.positai
+docs
