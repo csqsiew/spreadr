@@ -40,3 +40,4 @@ Author: Cynthia Siew [aut, cre],
 Maintainer: Cynthia Siew <cynsiewsq@gmail.com>
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
+URL: https://csqsiew.github.io/spreadr/
