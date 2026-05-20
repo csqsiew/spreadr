@@ -1,5 +1,14 @@
+# spreadr 0.3.0
+
+## bug fixes 
+- removed the `extrafont` dependency which caused package to be removed from CRAN in Sep 2025 
+- fixed (#7) issue - weighted graphs with negative edge weights will be thrown an error
+- fixed (#4) issue - weighted igraph objects retain their weights in the converted adjacency matrix 
+
+## others
+- a new hex logo and website added 
+
 # spreadr 0.2.0
-# updates of 10th May 2021
 
 ## bug fixes
 - fixed (#1) issue related to missing activation values at leaf nodes 

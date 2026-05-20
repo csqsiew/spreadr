@@ -1,7 +1,7 @@
 Package: spreadr
 Type: Package
 Title: Simulating Spreading Activation in a Network
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: c(
     person("Cynthia","Siew", role = c("aut", "cre"),
       email = "cynsiewsq@gmail.com", ),
@@ -18,11 +18,11 @@ Depends:
 Imports:
     Matrix,
     assertthat,
-    igraph,
-    ggplot2
+    igraph
 Suggests:
     dplyr,
     fs,
+    ggplot2,
     gganimate,
     ggraph,
     gifski,
