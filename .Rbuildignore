@@ -16,3 +16,4 @@ tests/testthat/.*gif$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.github$
