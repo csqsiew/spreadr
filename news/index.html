@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spreadr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,9 +35,38 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="spreadr-020">spreadr 0.2.0<a class="anchor" aria-label="anchor" href="#spreadr-020"></a></h2><p class="text-muted">CRAN release: 2021-05-11</p>
+<h2 class="pkg-version" data-toc-text="0.3.0" id="spreadr-030">spreadr 0.3.0<a class="anchor" aria-label="anchor" href="#spreadr-030"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-3-0">bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-0"></a></h3>
+<ul><li>removed the <code>extrafont</code> dependency which caused package to be removed from CRAN in Sep 2025</li>
+<li>fixed (#7) issue - weighted graphs with negative edge weights will be thrown an error</li>
+<li>fixed (#4) issue - weighted igraph objects retain their weights in the converted adjacency matrix</li>
+</ul></div>
+<div class="section level3">
+<h3 id="others-0-3-0">others<a class="anchor" aria-label="anchor" href="#others-0-3-0"></a></h3>
+<ul><li>a new hex logo and website added</li>
+</ul></div>
 </div>
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="spreadr-020">spreadr 0.2.0<a class="anchor" aria-label="anchor" href="#spreadr-020"></a></h2><p class="text-muted">CRAN release: 2021-05-11</p>
+<div class="section level3">
+<h3 id="bug-fixes-0-2-0">bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-0"></a></h3>
+<ul><li>fixed (#1) issue related to missing activation values at leaf nodes</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-2-0">new features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
+<ul><li>add activation at any time point</li>
+<li>specify retention values for each node</li>
+<li>decide whether to allow spreadr to run for a fixed number of time steps or choose a threshold to stop the process (threshold_to_stop)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-changes-0-2-0">minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-2-0"></a></h3>
+<ul><li>pre-pend activations at t=0 to output</li>
+<li>merged spreadr and spreadr2 functions (fixed time and threshold to stop)</li>
+</ul></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
