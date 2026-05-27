@@ -17,3 +17,6 @@ tests/testthat/.*gif$
 ^docs$
 ^pkgdown$
 ^\.github$
+^revdep$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
